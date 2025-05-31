@@ -1,0 +1,45 @@
+{
+  "name": "@dailydoco/root",
+  "version": "1.0.0",
+  "description": "DailyDoco Pro - Elite-tier automated documentation platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "lint": "nx run-many --target=lint --all",
+    "dev": "nx run-many --target=dev --all --parallel",
+    "start:desktop": "nx run desktop:dev",
+    "start:mcp": "nx run mcp-server:dev",
+    "start:dashboard": "nx run web-dashboard:dev",
+    "benchmark": "nx run-many --target=benchmark --all",
+    "compile:video": "nx run video-proc:compile",
+    "test:audience": "nx run test-audience:simulate"
+  },
+  "devDependencies": {
+    "@nx/workspace": "^17.0.0",
+    "@nx/js": "^17.0.0",
+    "@nx/node": "^17.0.0",
+    "@nx/rust": "^17.0.0",
+    "@nx/web": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "nx": "^17.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "author": "DailyDoco Pro Team",
+  "license": "MIT"
+}

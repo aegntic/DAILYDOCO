@@ -1,0 +1,112 @@
+[package]
+name = "dailydoco-desktop"
+version = "0.1.0"
+description = "DailyDoco Pro - Elite-tier automated documentation platform"
+authors = ["DailyDoco Team <team@dailydoco.pro>"]
+license = "MIT"
+repository = "https://github.com/dailydoco-pro/dailydoco-pro"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.0", features = [] }
+
+[dependencies]
+tauri = { version = "1.0", features = ["api-all", "updater", "system-tray"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+anyhow = "1.0"
+thiserror = "1.0"
+log = "0.4"
+env_logger = "0.10"
+reqwest = { version = "0.11", features = ["json", "multipart"] }
+futures = "0.3"
+
+# Performance monitoring
+sysinfo = "0.29"
+psutil = "3.2"
+
+# Video capture and processing
+ffmpeg-next = "6.0"
+opencv = { version = "0.88", features = ["opencv-4"] }
+image = "0.24"
+
+# AI integration
+candle-core = "0.3"
+candle-nn = "0.3"
+candle-transformers = "0.3"
+ort = "1.16"  # ONNX runtime
+
+# Audio processing
+cpal = "0.15"
+dasp = "0.11"
+
+# Screen capture
+screenshots = "0.8"
+captrs = "0.3"
+
+# Privacy and encryption
+aes-gcm = "0.10"
+chacha20poly1305 = "0.10"
+argon2 = "0.5"
+
+# Configuration
+config = "0.13"
+toml = "0.8"
+
+# File system operations
+walkdir = "2.0"
+notify = "6.0"
+
+# Cross-platform windowing
+winit = "0.28"
+rfd = "0.12"  # Native file dialogs
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.51", features = [
+    "Win32_Foundation",
+    "Win32_System_Threading",
+    "Win32_Graphics_Gdi",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_Media",
+] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24"
+core-foundation = "0.9"
+core-graphics = "0.22"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+x11 = "2.21"
+libc = "0.2"
+
+[features]
+# This feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+
+# Elite performance features
+gpu-acceleration = []
+hardware-encoding = []
+professional-codecs = []
+
+# AI model features
+local-ai = []
+deepseek-r1 = []
+gemma-3 = []
+modular-ai = []
+
+# Privacy features
+advanced-encryption = []
+secure-delete = []
+privacy-filters = []
+
+# Development features
+debug-tools = []
+performance-profiling = []
+telemetry = []
