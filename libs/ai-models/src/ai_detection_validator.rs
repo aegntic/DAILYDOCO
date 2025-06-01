@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Anti-AI Detection Validation Suite
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - AI Detection Validation
  * 
  * Advanced validation system to test against AI detection algorithms
  * Comprehensive testing against GPTZero, Originality.ai, YouTube, and other detection systems
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc, Duration};
 
-/// Elite anti-AI detection validation and testing system
+/// aegnt-27: Elite anti-AI detection validation and testing system for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct AIDetectionValidator {
+pub struct Aegnt27AIDetectionValidator {
     // Core detection testing engines
     detector_simulation_engine: Arc<DetectorSimulationEngine>,
     pattern_analysis_engine: Arc<PatternAnalysisEngine>,

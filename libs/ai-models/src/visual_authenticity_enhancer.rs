@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Visual Authenticity Enhancement System
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - Visual Authenticity Enhancement
  * 
  * Advanced visual processing for human-like visual characteristics and natural imperfections
  * Sophisticated computer vision analysis and visual authenticity optimization
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc, Duration};
 
-/// Elite visual authenticity enhancement and optimization system
+/// aegnt-27: Elite visual authenticity enhancement and optimization system for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct VisualAuthenticityEnhancer {
+pub struct Aegnt27VisualAuthenticityEnhancer {
     // Core visual processing engines
     visual_analyzer: Arc<VisualAnalyzer>,
     imperfection_injector: Arc<ImperfectionInjector>,

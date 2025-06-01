@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Mouse Movement Humanization System
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - Mouse Humanization
  * 
  * Advanced mouse movement patterns with human-like micro-movements and natural acceleration
  * Sophisticated drift, overshoot, correction patterns with Bezier curves for ultra-realistic behavior
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc, Duration};
 
-/// Elite mouse movement humanization system
+/// aegnt-27: Elite mouse movement humanization system for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct MouseHumanizer {
+pub struct Aegnt27MouseHumanizer {
     // Core humanization engines
     movement_pattern_generator: Arc<MovementPatternGenerator>,
     micro_movement_injector: Arc<MicroMovementInjector>,

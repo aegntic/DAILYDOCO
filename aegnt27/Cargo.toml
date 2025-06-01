@@ -1,0 +1,181 @@
+[package]
+name = "aegnt27"
+version = "2.7.0"
+edition = "2021"
+authors = ["Anthropic <noreply@anthropic.com>"]
+license = "MIT"
+description = "aegnt-27: The Human Peak Protocol - Where AI Achieves Peak Human Authenticity through 27 distinct behavioral patterns"
+homepage = "https://github.com/aegntic/aegnt27"
+repository = "https://github.com/aegntic/aegnt27"
+documentation = "https://docs.rs/aegnt27"
+readme = "README.md"
+keywords = ["ai", "authenticity", "human-peak", "behavioral-patterns", "automation"]
+categories = ["simulation", "multimedia", "text-processing", "algorithms"]
+exclude = [
+    "target/",
+    "Cargo.lock",
+    ".github/",
+    "docs/internal/",
+    "benches/results/",
+]
+
+[features]
+default = ["mouse", "typing", "detection", "dep:serde_json"]
+
+# Core humanization modules  
+mouse = ["dep:serde_json"]
+typing = ["dep:serde_json"]
+audio = ["dep:serde_json"]
+visual = ["dep:serde_json"]  
+detection = ["dep:serde_json"]
+
+# Advanced features
+persistence = ["dep:sqlx", "dep:serde_json", "dep:chrono"]
+encryption = ["dep:aes-gcm", "dep:argon2", "dep:ring"]
+benchmarks = ["dep:criterion", "dep:pprof"]
+compression = ["dep:flate2", "dep:lz4"]
+
+# Platform-specific features (commented out for compatibility)
+# windows = ["dep:winapi", "dep:windows"]
+# macos = ["dep:core-graphics", "dep:core-foundation"] 
+# linux = ["dep:x11", "dep:libc"]
+
+# Development and testing features
+dev = ["benchmarks", "dep:env_logger", "dep:pretty_assertions"]
+integration-tests = ["dep:mockall", "dep:wiremock"]
+
+[dependencies]
+# Core dependencies
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", optional = true }
+uuid = { version = "1.6", features = ["v4", "serde"] }
+anyhow = "1.0"
+thiserror = "1.0"
+log = "0.4"
+chrono = { version = "0.4", features = ["serde"], optional = true }
+rand = "0.8"
+rand_chacha = "0.3"
+
+# Async and concurrency
+futures = "0.3"
+async-trait = "0.1"
+parking_lot = "0.12"
+
+# Configuration and serialization
+toml = "0.8"
+config = "0.13"
+clap = { version = "4.4", features = ["derive"], optional = true }
+
+# Mathematical and statistical operations
+nalgebra = "0.32"
+statrs = "0.16"
+ndarray = "0.15"
+rand_distr = "0.4"
+num_cpus = "1.16"
+
+# Platform-specific dependencies (commented out for compatibility)
+# winapi = { version = "0.3", features = ["winuser", "windef"], optional = true }
+# x11 = { version = "2.21", features = ["xlib", "xtest"], optional = true }
+# core-graphics = { version = "0.22", optional = true }
+# core-foundation = { version = "0.9", optional = true }
+# enigo = { version = "0.1", optional = true }
+# rdev = { version = "0.4", optional = true }
+# cpal = { version = "0.15", optional = true }
+# hound = { version = "3.5", optional = true }
+# rubato = { version = "0.14", optional = true }
+# rustfft = { version = "6.1", optional = true }
+# image = { version = "0.24", optional = true }
+# opencv = { version = "0.88", optional = true }
+# ffmpeg-next = { version = "6.1", optional = true }
+# reqwest = { version = "0.11", features = ["json", "cookies"], optional = true }
+# scraper = { version = "0.18", optional = true }
+
+# Database and persistence
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "json"], optional = true }
+
+# Cryptography and security
+aes-gcm = { version = "0.10", optional = true }
+argon2 = { version = "0.5", optional = true }
+ring = { version = "0.17", optional = true }
+
+# Compression
+flate2 = { version = "1.0", optional = true }
+lz4 = { version = "1.24", optional = true }
+
+# Benchmarking and testing (also in dev-dependencies)
+criterion = { version = "0.5", features = ["html_reports"], optional = true }
+pprof = { version = "0.13", features = ["criterion", "flamegraph"], optional = true }
+mockall = { version = "0.12", optional = true }
+wiremock = { version = "0.5", optional = true }
+env_logger = { version = "0.10", optional = true }
+pretty_assertions = { version = "1.4", optional = true }
+
+# Platform-specific dependencies
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.52", features = ["Win32_UI_Input_KeyboardAndMouse", "Win32_UI_WindowsAndMessaging"], optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = { version = "0.9", optional = true }
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+criterion = { version = "0.5", features = ["html_reports"] }
+pprof = { version = "0.13", features = ["criterion", "flamegraph"] }
+mockall = "0.12"
+wiremock = "0.5"
+env_logger = "0.10"
+pretty_assertions = "1.4"
+tempfile = "3.8"
+serial_test = "3.0"
+
+[build-dependencies]
+cc = "1.0"
+pkg-config = "0.3"
+
+# Examples
+[[example]]
+name = "basic_integration"
+required-features = ["mouse", "typing", "detection"]
+
+[[example]]
+name = "advanced_customization"
+required-features = ["mouse", "typing", "audio", "visual", "detection"]
+
+[[example]]
+name = "multi_platform_deployment"
+required-features = ["mouse", "typing", "detection"]
+
+[[example]]
+name = "performance_optimization"
+required-features = ["mouse", "typing", "detection"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[package.metadata.playground]
+features = ["mouse", "typing", "detection"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.bench]
+debug = true
+lto = "thin"
+
+[profile.dev]
+debug = true
+opt-level = 1
+
+# [workspace]
+# members = ["examples/*", "benches/*"]
+
+# Minimum supported Rust version
+rust-version = "1.70"

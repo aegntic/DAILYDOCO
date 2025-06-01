@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Typing Pattern Variation System
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - Typing Humanization
  * 
  * Advanced human-like typing patterns with realistic timing, errors, and corrections
  * Sophisticated keystroke dynamics and behavioral modeling for ultra-tier authenticity
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc, Duration};
 
-/// Elite typing pattern variation and humanization system
+/// aegnt-27: Elite typing pattern variation and humanization system for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct TypingHumanizer {
+pub struct Aegnt27TypingHumanizer {
     // Core typing engines
     keystroke_timing_modeler: Arc<KeystrokeTimingModeler>,
     typing_rhythm_generator: Arc<TypingRhythmGenerator>,

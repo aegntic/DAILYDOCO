@@ -81,7 +81,7 @@ pub use model_performance_monitor::{
 };
 
 pub use natural_speech_generator::{
-    NaturalSpeechGenerator, SpeechGenerationConfig, SpeechHumanizationResult,
+    Aegnt27NaturalSpeechGenerator, SpeechGenerationConfig, SpeechHumanizationResult,
     BreathingEnhancements, PauseOptimizations, FillerWordInsertions,
 };
 
@@ -91,27 +91,27 @@ pub use personal_brand_learning::{
 };
 
 pub use mouse_humanizer::{
-    MouseHumanizer, MouseHumanizationConfig, MouseHumanizationResult,
+    Aegnt27MouseHumanizer, MouseHumanizationConfig, MouseHumanizationResult,
     MousePath, MousePoint, HumanizedMousePath, MovementAuthenticityScores,
 };
 
 pub use typing_humanizer::{
-    TypingHumanizer, TypingHumanizationConfig, TypingHumanizationResult,
+    Aegnt27TypingHumanizer, TypingHumanizationConfig, TypingHumanizationResult,
     HumanizedTypingSequence, HumanizedKeystroke, TypingAuthenticityScores,
 };
 
 pub use ai_detection_validator::{
-    AIDetectionValidator, AIDetectionValidationConfig, ValidationResult,
+    Aegnt27AIDetectionValidator, AIDetectionValidationConfig, ValidationResult,
     DetectorTestResult, DetectionVerdict, VulnerabilityAssessment,
 };
 
 pub use audio_spectral_humanizer::{
-    AudioSpectralHumanizer, AudioSpectralHumanizationConfig, AudioHumanizationResult,
+    Aegnt27AudioSpectralHumanizer, AudioSpectralHumanizationConfig, AudioHumanizationResult,
     HumanizedAudio, AudioAuthenticityScores, SpectralAnalysisResults,
 };
 
 pub use visual_authenticity_enhancer::{
-    VisualAuthenticityEnhancer, VisualAuthenticityConfig, VisualEnhancementResult,
+    Aegnt27VisualAuthenticityEnhancer, VisualAuthenticityConfig, VisualEnhancementResult,
     EnhancedVisualContent, VisualAuthenticityScores, VisualAnalysisResults,
 };
 

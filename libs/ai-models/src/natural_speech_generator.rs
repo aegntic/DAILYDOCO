@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Natural Speech Pattern Generator
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - Natural Speech Generator
  * 
  * Advanced humanization of AI-generated narration with ultra-realistic speech patterns
  * Sophisticated breathing, pauses, and natural variation with 95%+ authenticity score
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc};
 
-/// Elite natural speech pattern generator with human-like authenticity
+/// aegnt-27: Elite natural speech pattern generator for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct NaturalSpeechGenerator {
+pub struct Aegnt27NaturalSpeechGenerator {
     // Core humanization engines
     breathing_generator: Arc<BreathingGenerator>,
     pause_optimizer: Arc<PauseOptimizer>,

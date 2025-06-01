@@ -1,8 +1,9 @@
 /*!
- * DailyDoco Pro - Elite Audio Spectral Variation Humanizer
+ * DailyDoco Pro - aegnt-27: The Human Peak Protocol - Audio Spectral Humanization
  * 
  * Advanced spectral analysis and manipulation for human-like audio characteristics
  * Sophisticated frequency domain modifications and natural variation injection
+ * Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
  */
 
 use std::collections::HashMap;
@@ -13,9 +14,10 @@ use anyhow::{Result, anyhow};
 use tokio::sync::RwLock;
 use chrono::{DateTime, Utc, Duration};
 
-/// Elite audio spectral variation and humanization system
+/// aegnt-27: Elite audio spectral variation and humanization system for The Human Peak Protocol
+/// Utilizes 27 distinct behavioral patterns to achieve peak human authenticity
 #[derive(Debug, Clone)]
-pub struct AudioSpectralHumanizer {
+pub struct Aegnt27AudioSpectralHumanizer {
     // Core spectral processing engines
     spectral_analyzer: Arc<SpectralAnalyzer>,
     frequency_modulator: Arc<FrequencyModulator>,
