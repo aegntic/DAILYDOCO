@@ -1,7 +1,7 @@
 /*!
- * HUMaiN2.7 - Utilities Module
+ * aegnt-27 - Utilities Module
  * 
- * Common utilities, error handling, and helper functions for HUMaiN2.7
+ * Common utilities, error handling, and helper functions for aegnt-27
  */
 
 pub mod error;
@@ -9,7 +9,7 @@ pub mod environment;
 pub mod crypto;
 pub mod math;
 
-pub use error::{HumainError, Result};
+pub use error::{AegntError, Result};
 pub use environment::{validate_environment, get_platform_info, PlatformInfo};
 pub use crypto::{encrypt_data, decrypt_data, generate_key, hash_data};
 pub use math::{bezier_curve, interpolate, normalize_value, random_gaussian};
@@ -20,7 +20,7 @@ use uuid::Uuid;
 
 /// Generate a unique session ID
 pub fn generate_session_id() -> String {
-    format!("humain_{}_{}", 
+    format!("aegnt_{}_{}", 
         Uuid::new_v4().simple(), 
         SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis()
     )
@@ -90,8 +90,8 @@ mod tests {
         let id2 = generate_session_id();
         
         assert_ne!(id1, id2);
-        assert!(id1.starts_with("humain_"));
-        assert!(id2.starts_with("humain_"));
+        assert!(id1.starts_with("aegnt_"));
+        assert!(id2.starts_with("aegnt_"));
     }
 
     #[test]

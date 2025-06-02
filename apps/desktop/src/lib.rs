@@ -1,5 +1,5 @@
 /*!
- * HUMaiN2.7 - Human-like Ultra-Modern AI Neutralization System
+ * aegnt-27 - Autonomous Elite Generation Neural Technology System 2.7
  * 
  * A comprehensive Rust library for AI detection evasion and human-like behavior simulation.
  * Provides state-of-the-art humanization techniques for automated systems while maintaining
@@ -53,7 +53,7 @@ pub use config::{
 
 // Prelude module for convenient imports
 pub mod prelude {
-    //! Convenient re-exports for common HUMaiN2.7 usage
+    //! Convenient re-exports for common aegnt-27 usage
     
     pub use crate::{
         // Core types
@@ -117,7 +117,7 @@ pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 pub async fn init() -> utils::Result<()> {
     // Initialize logging if not already configured
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "humain27=info");
+        std::env::set_var("RUST_LOG", "aegnt_27=info");
     }
     
     env_logger::try_init().ok(); // Ignore error if already initialized
@@ -139,11 +139,11 @@ pub async fn init() -> utils::Result<()> {
 /// # Examples
 ///
 /// ```no_run
-/// use humain27::{prelude::*, config::HumainConfig};
+/// use aegnt_27::{prelude::*, config::AegntConfig};
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     let config = HumainConfig {
+///     let config = AegntConfig {
 ///         mouse: MouseConfig {
 ///             authenticity_target: 0.98,
 ///             ..Default::default()
@@ -151,14 +151,14 @@ pub async fn init() -> utils::Result<()> {
 ///         ..Default::default()
 ///     };
 ///     
-///     humain27::init_with_config(config).await?;
+///     aegnt_27::init_with_config(config).await?;
 ///     
 ///     // Your aegnt-27 code here
 ///     
 ///     Ok(())
 /// }
 /// ```
-pub async fn init_with_config(config: config::HumainConfig) -> utils::Result<()> {
+pub async fn init_with_config(config: config::AegntConfig) -> utils::Result<()> {
     // Initialize logging based on config
     if config.logging.enabled {
         if std::env::var("RUST_LOG").is_err() {
@@ -193,7 +193,7 @@ mod tests {
 
     #[tokio::test] 
     async fn test_init_with_config() {
-        let config = config::HumainConfig::default();
+        let config = config::AegntConfig::default();
         let result = init_with_config(config).await;
         assert!(result.is_ok(), "Config initialization failed: {:?}", result.err());
     }

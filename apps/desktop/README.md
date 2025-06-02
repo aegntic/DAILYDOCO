@@ -2,10 +2,10 @@
 
 **Autonomous Elite Generation Neural Technology System 2.7**
 
-[![Crates.io](https://img.shields.io/crates/v/humain27.svg)](https://crates.io/crates/humain27)
-[![Documentation](https://docs.rs/humain27/badge.svg)](https://docs.rs/humain27)
+[![Crates.io](https://img.shields.io/crates/v/aegnt-27.svg)](https://crates.io/crates/aegnt-27)
+[![Documentation](https://docs.rs/aegnt-27/badge.svg)](https://docs.rs/aegnt-27)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/aegntic/humain27/workflows/CI/badge.svg)](https://github.com/aegntic/humain27/actions)
+[![Build Status](https://github.com/aegntic/aegnt-27/workflows/CI/badge.svg)](https://github.com/aegntic/aegnt-27/actions)
 
 A cutting-edge Rust library that provides comprehensive AI detection evasion and human-like behavior simulation. aegnt-27 offers state-of-the-art humanization techniques for automated systems, ensuring authentic human-like interactions while maintaining privacy and avoiding AI detection.
 
@@ -63,7 +63,7 @@ aegnt-27 = { version = "2.7.0", features = ["basic-humanization"] }
 
 ```rust
 use aegnt_27::prelude::*;
-use humain27::mouse::{MouseHumanizer, MousePath, MousePoint, Coordinates};
+use aegnt_27::mouse::{MouseHumanizer, MousePath, MousePoint, Coordinates};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -122,7 +122,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```rust
 use aegnt_27::prelude::*;
-use humain27::detection::{AIDetectionValidator, ValidationInput, ContentType, ContentData};
+use aegnt_27::detection::{AIDetectionValidator, ValidationInput, ContentType, ContentData};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -171,11 +171,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## 🏗️ Architecture Overview
 
-HUMaiN2.7 is built on a modular architecture with five core subsystems:
+aegnt-27 is built on a modular architecture with five core subsystems:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    HUMaiN2.7 Core                      │
+│                    aegnt-27 Core                       │
 ├─────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
 │  │   Mouse     │  │   Typing    │  │   Audio     │     │
@@ -210,39 +210,39 @@ HUMaiN2.7 is built on a modular architecture with five core subsystems:
 
 ### Core Modules
 
-#### 🖱️ `humain27::mouse`
+#### 🖱️ `aegnt_27::mouse`
 - `MouseHumanizer` - Primary mouse movement humanization interface
 - `MousePath` - Represents mouse movement trajectories
 - `HumanizationResult` - Detailed results with authenticity scoring
 
-#### ⌨️ `humain27::typing`
+#### ⌨️ `aegnt_27::typing`
 - `TypingHumanizer` - Natural typing pattern simulation
 - `TypingSequence` - Keystroke timing and rhythm modeling
 - `AuthenticityScores` - Typing behavior authenticity metrics
 
-#### 🔊 `humain27::audio`
+#### 🔊 `aegnt_27::audio`
 - `AudioSpectralHumanizer` - Voice and audio humanization
 - `BreathingPatterns` - Natural respiratory rhythm injection
 - `SpeechCharacteristics` - Voice authenticity enhancement
 
-#### 👁️ `humain27::visual`
+#### 👁️ `aegnt_27::visual`
 - `VisualAuthenticityEnhancer` - Computer vision optimization
 - `GazePatterns` - Natural eye movement simulation
 - `AttentionModeling` - Human attention heatmap generation
 
-#### 🛡️ `humain27::detection`
+#### 🛡️ `aegnt_27::detection`
 - `AIDetectionValidator` - AI detector testing and evasion
 - `EvasionStrategies` - Countermeasure generation and optimization
 - `ResistanceScoring` - Detection resistance metrics
 
 ### Configuration Options
 
-HUMaiN2.7 supports extensive configuration through both code and config files:
+aegnt-27 supports extensive configuration through both code and config files:
 
 ```rust
-use humain27::config::HumainConfig;
+use aegnt_27::config::AegntConfig;
 
-let config = HumainConfig {
+let config = AegntConfig {
     mouse: MouseConfig {
         micro_movements_enabled: true,
         authenticity_target: 0.96,
@@ -298,7 +298,7 @@ let config = HumainConfig {
 
 ## 🔒 Privacy and Security
 
-HUMaiN2.7 is designed with privacy-first principles:
+aegnt-27 is designed with privacy-first principles:
 
 - **Local processing**: All humanization occurs locally, no cloud dependencies
 - **Zero telemetry**: No data collection or tracking
@@ -342,8 +342,8 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Clone the repository
-git clone https://github.com/aegntic/humain27.git
-cd humain27
+git clone https://github.com/aegntic/aegnt-27.git
+cd aegnt-27
 
 # Install Rust (if not already installed)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -370,9 +370,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Documentation**: [docs.rs/humain27](https://docs.rs/humain27)
-- **Issues**: [GitHub Issues](https://github.com/aegntic/humain27/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/aegntic/humain27/discussions)
+- **Documentation**: [docs.rs/aegnt-27](https://docs.rs/aegnt-27)
+- **Issues**: [GitHub Issues](https://github.com/aegntic/aegnt-27/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/aegntic/aegnt-27/discussions)
 - **Security**: security@aegntic.com
 
 ## 🙏 Acknowledgments
@@ -384,7 +384,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## ⚠️ Disclaimer
 
-HUMaiN2.7 is designed for legitimate use cases including:
+aegnt-27 is designed for legitimate use cases including:
 - **Accessibility**: Assisting users with motor impairments
 - **Testing**: Validating AI detection systems
 - **Research**: Academic study of human-computer interaction

@@ -1,14 +1,14 @@
 /*!
- * HUMaiN2.7 - Error Handling
+ * aegnt-27 - Error Handling
  * 
- * Comprehensive error types and handling for HUMaiN2.7
+ * Comprehensive error types and handling for aegnt-27
  */
 
 use std::fmt;
 
-/// Main error type for HUMaiN2.7
+/// Main error type for aegnt-27
 #[derive(Debug, thiserror::Error)]
-pub enum HumainError {
+pub enum AegntError {
     /// Mouse humanization errors
     #[error("Mouse humanization failed: {message}")]
     MouseHumanization { message: String },
@@ -62,10 +62,10 @@ pub enum HumainError {
     Internal { message: String },
 }
 
-/// Result type alias for HUMaiN2.7
-pub type Result<T> = std::result::Result<T, HumainError>;
+/// Result type alias for aegnt-27
+pub type Result<T> = std::result::Result<T, AegntError>;
 
-impl HumainError {
+impl AegntError {
     /// Create a mouse humanization error
     pub fn mouse_humanization(message: impl Into<String>) -> Self {
         Self::MouseHumanization { message: message.into() }

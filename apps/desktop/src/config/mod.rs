@@ -1,16 +1,16 @@
 /*!
- * HUMaiN2.7 - Configuration Module
+ * aegnt-27 - Configuration Module
  * 
- * Configuration structures and management for all HUMaiN2.7 modules
+ * Configuration structures and management for all aegnt-27 modules
  */
 
 use serde::{Serialize, Deserialize};
-use crate::utils::{HumainError, Result, Validate};
+use crate::utils::{AegntError, Result, Validate};
 use std::path::PathBuf;
 
-/// Main configuration structure for HUMaiN2.7
+/// Main configuration structure for aegnt-27
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct HumainConfig {
+pub struct AegntConfig {
     /// Mouse humanization configuration
     pub mouse: MouseConfig,
     
@@ -519,8 +519,8 @@ impl Default for PrivacyConfig {
     }
 }
 
-impl Validate for HumainConfig {
-    type Error = HumainError;
+impl Validate for AegntConfig {
+    type Error = AegntError;
     
     fn validate(&self) -> Result<()> {
         self.mouse.validate()?;
@@ -651,40 +651,40 @@ pub struct ConfigManager;
 
 impl ConfigManager {
     /// Load configuration from file
-    pub fn load_from_file(path: &std::path::Path) -> Result<HumainConfig> {
+    pub fn load_from_file(path: &std::path::Path) -> Result<AegntConfig> {
         let content = std::fs::read_to_string(path)
-            .map_err(|e| HumainError::configuration(format!("Failed to read config file: {}", e)))?;
+            .map_err(|e| AegntError::configuration(format!("Failed to read config file: {}", e)))?
         
         if path.extension().and_then(|s| s.to_str()) == Some("json") {
             serde_json::from_str(&content)
-                .map_err(|e| HumainError::configuration(format!("Failed to parse JSON config: {}", e)))
+                .map_err(|e| AegntError::configuration(format!("Failed to parse JSON config: {}", e)))
         } else {
             toml::from_str(&content)
-                .map_err(|e| HumainError::configuration(format!("Failed to parse TOML config: {}", e)))
+                .map_err(|e| AegntError::configuration(format!("Failed to parse TOML config: {}", e)))
         }
     }
     
     /// Save configuration to file
-    pub fn save_to_file(config: &HumainConfig, path: &std::path::Path) -> Result<()> {
+    pub fn save_to_file(config: &AegntConfig, path: &std::path::Path) -> Result<()> {
         let content = if path.extension().and_then(|s| s.to_str()) == Some("json") {
             serde_json::to_string_pretty(config)
-                .map_err(|e| HumainError::configuration(format!("Failed to serialize JSON config: {}", e)))?
+                .map_err(|e| AegntError::configuration(format!("Failed to serialize JSON config: {}", e)))?
         } else {
             toml::to_string_pretty(config)
-                .map_err(|e| HumainError::configuration(format!("Failed to serialize TOML config: {}", e)))?
+                .map_err(|e| AegntError::configuration(format!("Failed to serialize TOML config: {}", e)))?
         };
         
         std::fs::write(path, content)
-            .map_err(|e| HumainError::configuration(format!("Failed to write config file: {}", e)))?;
+            .map_err(|e| AegntError::configuration(format!("Failed to write config file: {}", e)))?;
         
         Ok(())
     }
     
     /// Load configuration from environment variables
-    pub fn load_from_env() -> Result<HumainConfig> {
+    pub fn load_from_env() -> Result<AegntConfig> {
         // This would implement environment variable configuration loading
         // For now, return default config
-        Ok(HumainConfig::default())
+        Ok(AegntConfig::default())
     }
 }
 
