@@ -76,14 +76,10 @@
       "targets": "all",
       "identifier": "pro.dailydoco.desktop",
       "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
+        "icons/icon.png",
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": ["resources/*"],
-      "externalBin": ["binaries/ffmpeg"],
       "copyright": "© 2025 DailyDoco Pro Team",
       "category": "DeveloperTool",
       "shortDescription": "Elite-tier automated documentation platform",
@@ -137,7 +133,7 @@
       }
     ],
     "systemTray": {
-      "iconPath": "icons/tray-icon.png",
+      "iconPath": "icons/icon.png",
       "iconAsTemplate": true,
       "menuOnLeftClick": false,
       "title": "DailyDoco Pro"

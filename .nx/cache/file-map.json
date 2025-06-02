@@ -1,0 +1,679 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.3.2",
+  "deps": {
+    "tslib": "^2.6.0",
+    "@nx/workspace": "^17.0.0",
+    "@nx/js": "^17.0.0",
+    "@nx/node": "^17.0.0",
+    "@nx/web": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "nx": "^17.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "pathMappings": {
+    "@dailydoco/shared-types": [
+      "libs/shared-types/src/index.ts"
+    ],
+    "@dailydoco/ai-models": [
+      "libs/ai-models/src/index.ts"
+    ],
+    "@dailydoco/video-proc": [
+      "libs/video-proc/src/index.ts"
+    ],
+    "@dailydoco/test-audience": [
+      "libs/test-audience/src/index.ts"
+    ],
+    "@dailydoco/performance-monitor": [
+      "libs/performance-monitor/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "@dailydoco/mcp-server": [
+        {
+          "file": "apps/mcp-server/package.json",
+          "hash": "2359088189231865763",
+          "deps": [
+            "@dailydoco/shared-types"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/index.ts",
+          "hash": "15719059516563033904",
+          "deps": [
+            "npm:@modelcontextprotocol/sdk/server/index.js",
+            "npm:@modelcontextprotocol/sdk/server/stdio.js",
+            "npm:@modelcontextprotocol/sdk/types.js",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/ai-test-audience.ts",
+          "hash": "4449469481508257363",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/authenticity-engine.ts",
+          "hash": "6541362418888690835",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/capture-controller.ts",
+          "hash": "2825932808504928244",
+          "deps": [
+            "npm:zod",
+            "npm:events"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/performance-monitor.ts",
+          "hash": "4919226226439133982",
+          "deps": [
+            "npm:zod",
+            "npm:events"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/personal-brand.ts",
+          "hash": "3048167441271913646",
+          "deps": [
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/project-analyzer.ts",
+          "hash": "9344815289557063958",
+          "deps": [
+            "npm:fs/promises",
+            "npm:path",
+            "npm:fast-glob",
+            "npm:zod"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/project-fingerprinter.ts",
+          "hash": "8790084106330574050",
+          "deps": [
+            "npm:zod",
+            "npm:fs/promises",
+            "npm:path",
+            "npm:fast-glob"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/src/tools/video-compiler.ts",
+          "hash": "9521966932947559989",
+          "deps": [
+            "npm:zod",
+            "npm:events"
+          ]
+        },
+        {
+          "file": "apps/mcp-server/tsconfig.json",
+          "hash": "8445982286519879053"
+        }
+      ],
+      "@dailydoco/shared-types": [
+        {
+          "file": "libs/shared-types/package.json",
+          "hash": "9633824812873617666"
+        },
+        {
+          "file": "libs/shared-types/src/core/ai.types.ts",
+          "hash": "8632952378377929504"
+        },
+        {
+          "file": "libs/shared-types/src/core/capture.types.ts",
+          "hash": "12093554087617582221"
+        },
+        {
+          "file": "libs/shared-types/src/core/performance.types.ts",
+          "hash": "15554568561697128041"
+        },
+        {
+          "file": "libs/shared-types/src/core/project.types.ts",
+          "hash": "9162216782340279061"
+        },
+        {
+          "file": "libs/shared-types/src/core/user.types.ts",
+          "hash": "16094380560447795775"
+        },
+        {
+          "file": "libs/shared-types/src/core/video.types.ts",
+          "hash": "11028714674831121278"
+        },
+        {
+          "file": "libs/shared-types/src/features/human-fingerprint.types.ts",
+          "hash": "5554462327440649605"
+        },
+        {
+          "file": "libs/shared-types/src/features/modular-ai.types.ts",
+          "hash": "6584300849463070735"
+        },
+        {
+          "file": "libs/shared-types/src/features/personal-brand.types.ts",
+          "hash": "5265932600003527125"
+        },
+        {
+          "file": "libs/shared-types/src/features/test-audience.types.ts",
+          "hash": "17815240203421376800"
+        },
+        {
+          "file": "libs/shared-types/src/index.ts",
+          "hash": "7080657351024520778"
+        },
+        {
+          "file": "libs/shared-types/tsconfig.json",
+          "hash": "5234743636437882950"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".eslintrc.json",
+        "hash": "3071909117626847384"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "16329187857077811213"
+      },
+      {
+        "file": ".mcp.json",
+        "hash": "10457613131874650796"
+      },
+      {
+        "file": "CLAUDE.md",
+        "hash": "13993378775117601389"
+      },
+      {
+        "file": "INSTALL.md",
+        "hash": "1466396978774029758"
+      },
+      {
+        "file": "MCP-SERVER-STATE.md",
+        "hash": "11023435189165370330"
+      },
+      {
+        "file": "PLANNING.md",
+        "hash": "8043486501947519787"
+      },
+      {
+        "file": "README.md",
+        "hash": "12526156713317927815"
+      },
+      {
+        "file": "TASKS.md",
+        "hash": "10308550369765615119"
+      },
+      {
+        "file": "apps/browser-ext/CHROME-STORE-SUBMISSION-GUIDE.md",
+        "hash": "5914392362496617571"
+      },
+      {
+        "file": "apps/browser-ext/automated-submission-guide.js",
+        "hash": "1495068725902831403"
+      },
+      {
+        "file": "apps/browser-ext/build-all.js",
+        "hash": "12494489863846868224"
+      },
+      {
+        "file": "apps/browser-ext/builds/BUILD-README.md",
+        "hash": "8060190371132338581"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-128.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-128.svg",
+        "hash": "2182725993236197097"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-16.png",
+        "hash": "17397504737020691058"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-16.svg",
+        "hash": "2936232186659141478"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-32.png",
+        "hash": "8022340469804807053"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-32.svg",
+        "hash": "1708792150777910053"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-48.png",
+        "hash": "3649602584831113272"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon-48.svg",
+        "hash": "2139458204885159163"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/assets/icon.svg",
+        "hash": "5143461983402544600"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/background/background.js",
+        "hash": "2875622613908824115"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/content/content.css",
+        "hash": "13673346114538430630"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/content/content.js",
+        "hash": "6894988250192074610"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/manifest.json",
+        "hash": "9435135659900929395"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/popup/popup.css",
+        "hash": "8444217093170668506"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/popup/popup.html",
+        "hash": "13518980073995651056"
+      },
+      {
+        "file": "apps/browser-ext/builds/chrome/popup/popup.js",
+        "hash": "17704014443825210705"
+      },
+      {
+        "file": "apps/browser-ext/builds/dailydoco-pro-chrome-v1.0.0-2025-05-31.zip",
+        "hash": "16887048811182987316"
+      },
+      {
+        "file": "apps/browser-ext/builds/dailydoco-pro-firefox-v1.0.0-2025-05-31.zip",
+        "hash": "1591485887214955543"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-128.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-128.svg",
+        "hash": "2182725993236197097"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-16.png",
+        "hash": "17397504737020691058"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-16.svg",
+        "hash": "2936232186659141478"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-32.png",
+        "hash": "8022340469804807053"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-32.svg",
+        "hash": "1708792150777910053"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-48.png",
+        "hash": "3649602584831113272"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon-48.svg",
+        "hash": "2139458204885159163"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/assets/icon.svg",
+        "hash": "5143461983402544600"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/background/background.js",
+        "hash": "2368691983902059825"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/content/content.css",
+        "hash": "13673346114538430630"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/content/content.js",
+        "hash": "6894988250192074610"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/manifest.json",
+        "hash": "13320903231240354988"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/popup/popup.css",
+        "hash": "8444217093170668506"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/popup/popup.html",
+        "hash": "13518980073995651056"
+      },
+      {
+        "file": "apps/browser-ext/builds/firefox/popup/popup.js",
+        "hash": "17704014443825210705"
+      },
+      {
+        "file": "apps/browser-ext/builds/package-info.json",
+        "hash": "14153906551046001796"
+      },
+      {
+        "file": "apps/browser-ext/chrome-store-autofill-script.js",
+        "hash": "2790271454828974048"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-128.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-128.svg",
+        "hash": "2182725993236197097"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-16.png",
+        "hash": "17397504737020691058"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-16.svg",
+        "hash": "2936232186659141478"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-32.png",
+        "hash": "8022340469804807053"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-32.svg",
+        "hash": "1708792150777910053"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-48.png",
+        "hash": "3649602584831113272"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon-48.svg",
+        "hash": "2139458204885159163"
+      },
+      {
+        "file": "apps/browser-ext/chrome/assets/icon.svg",
+        "hash": "5143461983402544600"
+      },
+      {
+        "file": "apps/browser-ext/chrome/background/background.js",
+        "hash": "2875622613908824115"
+      },
+      {
+        "file": "apps/browser-ext/chrome/content/content.css",
+        "hash": "13673346114538430630"
+      },
+      {
+        "file": "apps/browser-ext/chrome/content/content.js",
+        "hash": "6894988250192074610"
+      },
+      {
+        "file": "apps/browser-ext/chrome/manifest.json",
+        "hash": "9435135659900929395"
+      },
+      {
+        "file": "apps/browser-ext/chrome/package.json",
+        "hash": "8078692450653817038"
+      },
+      {
+        "file": "apps/browser-ext/chrome/popup/popup.css",
+        "hash": "8444217093170668506"
+      },
+      {
+        "file": "apps/browser-ext/chrome/popup/popup.html",
+        "hash": "13518980073995651056"
+      },
+      {
+        "file": "apps/browser-ext/chrome/popup/popup.js",
+        "hash": "17704014443825210705"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-128.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-128.svg",
+        "hash": "2182725993236197097"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-16.png",
+        "hash": "17397504737020691058"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-16.svg",
+        "hash": "2936232186659141478"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-32.png",
+        "hash": "8022340469804807053"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-32.svg",
+        "hash": "1708792150777910053"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-48.png",
+        "hash": "3649602584831113272"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon-48.svg",
+        "hash": "2139458204885159163"
+      },
+      {
+        "file": "apps/browser-ext/firefox/assets/icon.svg",
+        "hash": "5143461983402544600"
+      },
+      {
+        "file": "apps/browser-ext/firefox/background/background.js",
+        "hash": "2368691983902059825"
+      },
+      {
+        "file": "apps/browser-ext/firefox/content/content.css",
+        "hash": "13673346114538430630"
+      },
+      {
+        "file": "apps/browser-ext/firefox/content/content.js",
+        "hash": "6894988250192074610"
+      },
+      {
+        "file": "apps/browser-ext/firefox/manifest.json",
+        "hash": "13320903231240354988"
+      },
+      {
+        "file": "apps/browser-ext/firefox/package.json",
+        "hash": "11429696524599231"
+      },
+      {
+        "file": "apps/browser-ext/firefox/popup/popup.css",
+        "hash": "8444217093170668506"
+      },
+      {
+        "file": "apps/browser-ext/firefox/popup/popup.html",
+        "hash": "13518980073995651056"
+      },
+      {
+        "file": "apps/browser-ext/firefox/popup/popup.js",
+        "hash": "17704014443825210705"
+      },
+      {
+        "file": "apps/browser-ext/mcp-browser-workflow.js",
+        "hash": "7323805008720707977"
+      },
+      {
+        "file": "apps/browser-ext/package.json",
+        "hash": "3691642346260397667"
+      },
+      {
+        "file": "apps/browser-ext/run-chrome-store-automation.js",
+        "hash": "10255763619369748190"
+      },
+      {
+        "file": "apps/browser-ext/setup-chrome-store-submission.js",
+        "hash": "9260853192101588852"
+      },
+      {
+        "file": "apps/browser-ext/shared/chrome-store-publisher.js",
+        "hash": "17265296214002968878"
+      },
+      {
+        "file": "apps/browser-ext/shared/convert-icons.js",
+        "hash": "16069591920740942072"
+      },
+      {
+        "file": "apps/browser-ext/shared/create-demo.js",
+        "hash": "8157789045723070058"
+      },
+      {
+        "file": "apps/desktop/Cargo.lock",
+        "hash": "10166513281358902610"
+      },
+      {
+        "file": "apps/desktop/Cargo.toml",
+        "hash": "7222099183300967434"
+      },
+      {
+        "file": "apps/desktop/build.rs",
+        "hash": "11335141165151911379"
+      },
+      {
+        "file": "apps/desktop/frontend/index.html",
+        "hash": "17294330362649562290"
+      },
+      {
+        "file": "apps/desktop/icons/128x128.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/desktop/icons/128x128@2x.png",
+        "hash": "2823942329837862174"
+      },
+      {
+        "file": "apps/desktop/icons/32x32.png",
+        "hash": "8022340469804807053"
+      },
+      {
+        "file": "apps/desktop/icons/icon.icns",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "apps/desktop/icons/icon.ico",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "apps/desktop/icons/icon.png",
+        "hash": "15047278210768485058"
+      },
+      {
+        "file": "apps/desktop/icons/tray-icon.png",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "apps/desktop/launch-dailydoco.sh",
+        "hash": "1385460389820249237"
+      },
+      {
+        "file": "apps/desktop/src/ai/mod.rs",
+        "hash": "7846423906463736389"
+      },
+      {
+        "file": "apps/desktop/src/ai/models/deepseek_r1.rs",
+        "hash": "8283531546924554113"
+      },
+      {
+        "file": "apps/desktop/src/ai/models/gemma_3.rs",
+        "hash": "11878872989613411052"
+      },
+      {
+        "file": "apps/desktop/src/ai/models/mod.rs",
+        "hash": "10597551258568422963"
+      },
+      {
+        "file": "apps/desktop/src/capture/mod.rs",
+        "hash": "15820282979549153999"
+      },
+      {
+        "file": "apps/desktop/src/commands.rs",
+        "hash": "8105248317360199392"
+      },
+      {
+        "file": "apps/desktop/src/config.rs",
+        "hash": "2214147689523807540"
+      },
+      {
+        "file": "apps/desktop/src/fingerprinting.rs",
+        "hash": "4425875283927989366"
+      },
+      {
+        "file": "apps/desktop/src/main.rs",
+        "hash": "4936359364025840892"
+      },
+      {
+        "file": "apps/desktop/src/performance.rs",
+        "hash": "1365677597165292662"
+      },
+      {
+        "file": "apps/desktop/src/privacy.rs",
+        "hash": "14566753505493237903"
+      },
+      {
+        "file": "apps/desktop/src/storage.rs",
+        "hash": "14203113409440539799"
+      },
+      {
+        "file": "apps/desktop/src/video.rs",
+        "hash": "5319817052762397459"
+      },
+      {
+        "file": "apps/desktop/tauri.conf.json",
+        "hash": "10557624719888083576"
+      },
+      {
+        "file": "autodoc_claude_instructions.md",
+        "hash": "7613712055906516225"
+      },
+      {
+        "file": "autodoc_pro_instructions.md",
+        "hash": "9785606542181102569"
+      },
+      {
+        "file": "nx.json",
+        "hash": "8770480788493261098"
+      },
+      {
+        "file": "package.json",
+        "hash": "16089459505564530558"
+      },
+      {
+        "file": "project-doc-system.md",
+        "hash": "5066875684388317622"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "11704092657129463640"
+      },
+      {
+        "file": "video-pipeline.html",
+        "hash": "1264251560708053702"
+      },
+      {
+        "file": "workspace.json",
+        "hash": "12156615643226738683"
+      }
+    ]
+  }
+}

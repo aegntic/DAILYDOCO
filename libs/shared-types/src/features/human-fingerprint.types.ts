@@ -1,4 +1,5 @@
-// Human Authenticity Engine Types - 95%+ Authenticity Score
+// aegnt-27: The Human Peak Protocol - Human Authenticity Engine Types
+// Where AI Achieves Peak Human Authenticity - 95%+ Authenticity Score
 
 export interface HumanFingerprintConfig {
   enabled: boolean;

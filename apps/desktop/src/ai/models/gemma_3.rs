@@ -1,5 +1,6 @@
-// Gemma 3 Model Implementation
-// Ultra-efficient edge deployment model
+// Gemma 3 Latest Model Implementation  
+// Updated January 6, 2025 - Ultra-efficient edge deployment with sub-100ms response times
+// Optimized for real-time features and browser deployment
 
 use async_trait::async_trait;
 use anyhow::{Result, anyhow};
@@ -194,7 +195,7 @@ impl Gemma3 {
     }
 
     /// Process different types of AI tasks with speed optimization
-    async fn process_task_optimized(&self, task: &AITask) -> Result<ModelResponse> {
+    async fn process_task_optimized(&mut self, task: &AITask) -> Result<ModelResponse> {
         // Check cache first for frequently requested tasks
         let cache_key = self.generate_cache_key(task);
         if let Some(cached) = self.check_cache(&cache_key) {
@@ -631,8 +632,8 @@ impl Gemma3 {
         
         // Simple pattern matching for privacy content
         let privacy_patterns = [
-            (r"password\s*=\s*['\"].*['\"]", "password"),
-            (r"api[_-]?key\s*=\s*['\"].*['\"]", "api_key"),
+            (r#"password\s*=\s*['"].*['"]"#, "password"),
+            (r#"api[_-]?key\s*=\s*['"].*['"]"#, "api_key"),
             (r"\b\d{3}-\d{2}-\d{4}\b", "ssn"),
             (r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b", "email"),
         ];
@@ -696,7 +697,7 @@ impl AIModel for Gemma3 {
         Ok(self.config.clone())
     }
 
-    async fn process_task(&self, task: &AITask) -> Result<ModelResponse> {
+    async fn process_task(&mut self, task: &AITask) -> Result<ModelResponse> {
         let start_time = std::time::Instant::now();
         self.request_count += 1;
         

@@ -7,6 +7,7 @@ use uuid::Uuid;
 
 pub mod deepseek_r1;
 pub mod gemma_3;
+pub mod openrouter_integration;
 
 pub use deepseek_r1::DeepSeekR1;
 pub use gemma_3::Gemma3;
@@ -26,7 +27,7 @@ pub trait AIModel {
     async fn get_config(&self) -> Result<ModelConfig>;
     
     /// Process a task and return response
-    async fn process_task(&self, task: &AITask) -> Result<ModelResponse>;
+    async fn process_task(&mut self, task: &AITask) -> Result<ModelResponse>;
     
     /// Check model health and availability
     async fn health_check(&self) -> Result<HealthStatus>;

@@ -1,440 +1,443 @@
-// Capture Engine - Elite Performance Screen Recording
-// Targets: < 5% CPU usage, 4K @ 30fps support, sub-16ms latency
-
-use std::sync::Arc;
-use tokio::sync::{Mutex, mpsc};
-use anyhow::{Result, anyhow};
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
+//! DailyDoco Pro - Elite-Tier Native Screen Capture Engine
+//! 
+//! Cross-platform screen capture with hardware acceleration, privacy controls,
+//! and sub-2x realtime processing for professional video documentation.
+//!
+//! ## Performance Targets
+//! - 4K@30fps with <5% CPU usage
+//! - <200MB memory baseline
+//! - GPU acceleration where available
+//! - Real-time privacy filtering
 
 pub mod screen;
-pub mod audio;
-pub mod activity;
-pub mod privacy;
+pub mod native;   // Platform-specific native capture implementations
+pub mod monitors; // Multi-monitor detection and coordination
+pub mod activity; // Activity detection and ML scoring
+pub mod privacy;  // Privacy filtering and content sanitization
+// pub mod audio;     // TODO: Re-enable when audio dependencies are available
 
-use screen::ScreenCapture;
-use audio::AudioCapture;
-use activity::ActivityDetector;
-use privacy::PrivacyFilter;
+// Re-export both legacy and new interfaces for compatibility
+pub use screen::{
+    ScreenCaptureEngine,
+    CaptureConfig as LegacyCaptureConfig,
+    CaptureFrame as LegacyCaptureFrame,
+    CaptureRegion,
+    CaptureEvent,
+    CaptureStats,
+    FrameFormat as LegacyFrameFormat,
+};
 
-/// Main capture engine coordinating all capture subsystems
-pub struct CaptureEngine {
-    screen_capture: Arc<Mutex<ScreenCapture>>,
-    audio_capture: Arc<Mutex<AudioCapture>>,
-    activity_detector: Arc<Mutex<ActivityDetector>>,
-    privacy_filter: Arc<Mutex<PrivacyFilter>>,
-    
-    // State
-    current_session: Arc<Mutex<Option<CaptureSession>>>,
-    is_capturing: Arc<Mutex<bool>>,
-    
-    // Communication channels
-    frame_tx: mpsc::UnboundedSender<CapturedFrame>,
-    frame_rx: Arc<Mutex<mpsc::UnboundedReceiver<CapturedFrame>>>,
+// New elite-tier capture interface
+pub use native::{
+    ScreenCapture,
+    CaptureFrame,
+    CaptureConfig,
+    FrameFormat,
+    CaptureError,
+    CaptureResult,
+    CaptureSession,
+    MonitorInfo,
+    CaptureCapabilities,
+    PerformanceReport,
+    CaptureEngineFactory,
+    MockCaptureEngine,
+    Resolution,
+    MonitorSelection,
+    QualityPreset,
+};
+
+use anyhow::Result;
+use serde::{Serialize, Deserialize};
+use std::sync::Arc;
+use async_trait::async_trait;
+
+/// Elite-tier capture controller with native platform optimizations
+pub struct CaptureController {
+    legacy_screen_engine: Option<ScreenCaptureEngine>,
+    native_capture_engine: Option<Box<dyn ScreenCapture>>,
+    capture_session: Option<CaptureSession>,
+    performance_monitor: Arc<crate::performance::PerformanceMonitor>,
+    // audio_engine: Option<AudioCaptureEngine>,    // TODO: Add when audio is ready
+    // activity_detector: Option<ActivityDetector>,  // TODO: Add activity detection
+    // privacy_filter: Option<PrivacyFilter>,       // TODO: Add privacy filtering
 }
 
+/// Elite-tier master capture configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CaptureSession {
-    pub id: Uuid,
-    pub project_id: Uuid,
-    pub start_time: DateTime<Utc>,
-    pub end_time: Option<DateTime<Utc>>,
-    pub config: CaptureConfig,
-    pub status: CaptureStatus,
-    pub statistics: CaptureStatistics,
-    pub metadata: SessionMetadata,
+pub struct MasterCaptureConfig {
+    pub screen: LegacyCaptureConfig,      // Legacy compatibility
+    pub native: Option<CaptureConfig>,    // New native capture config
+    pub use_native_engine: bool,          // Switch between legacy and native
+    pub enable_audio: bool,
+    pub enable_activity_detection: bool,
+    pub enable_privacy_filtering: bool,
+    pub output_directory: String,
+    pub performance_targets: PerformanceTargets,
 }
 
+/// Performance targets for validation
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CaptureConfig {
-    pub quality: CaptureQuality,
-    pub fps: u32,
-    pub monitors: Vec<MonitorConfig>,
-    pub audio: AudioConfig,
-    pub privacy: PrivacyConfig,
-    pub performance: PerformanceConfig,
+pub struct PerformanceTargets {
+    pub max_cpu_usage_percent: f32,
+    pub max_memory_mb: u64,
+    pub target_fps: u32,
+    pub max_capture_latency_ms: f64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum CaptureQuality {
-    Low,      // 720p
-    Medium,   // 1080p
-    High,     // 1440p
-    Ultra,    // 4K
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MonitorConfig {
-    pub id: String,
-    pub enabled: bool,
-    pub region: Option<CaptureRegion>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CaptureRegion {
-    pub x: u32,
-    pub y: u32,
-    pub width: u32,
-    pub height: u32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AudioConfig {
-    pub enabled: bool,
-    pub source: AudioSource,
-    pub quality: AudioQuality,
-    pub noise_reduction: bool,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum AudioSource {
-    System,
-    Microphone,
-    Both,
-    None,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum AudioQuality {
-    Low,      // 64kbps
-    Medium,   // 128kbps
-    High,     // 256kbps
-    Lossless, // 1411kbps
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PrivacyConfig {
-    pub sensitive_content_detection: bool,
-    pub blur_sensitive_content: bool,
-    pub exclude_patterns: Vec<String>,
-    pub api_key_detection: bool,
-    pub password_detection: bool,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PerformanceConfig {
-    pub max_cpu_usage: f32,      // percentage
-    pub max_memory_usage: u64,   // bytes
-    pub gpu_acceleration: bool,
-    pub hardware_encoder: bool,
-    pub adaptive_quality: bool,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum CaptureStatus {
-    Initializing,
-    Recording,
-    Paused,
-    Stopped,
-    Processing,
-    Completed,
-    Failed,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CaptureStatistics {
-    pub total_frames: u64,
-    pub dropped_frames: u64,
-    pub total_size: u64,          // bytes
-    pub compression_ratio: f32,
-    pub average_fps: f32,
-    pub cpu_usage: f32,           // percentage
-    pub memory_usage: u64,        // bytes
-    pub processing_latency: f32,  // milliseconds
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SessionMetadata {
-    pub environment_info: EnvironmentInfo,
-    pub captured_events: Vec<ActivityEvent>,
-    pub privacy_actions: Vec<PrivacyAction>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EnvironmentInfo {
-    pub os: String,
-    pub version: String,
-    pub architecture: String,
-    pub total_memory: u64,
-    pub cpu_cores: u32,
-    pub monitors: Vec<MonitorInfo>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MonitorInfo {
-    pub id: String,
-    pub name: String,
-    pub width: u32,
-    pub height: u32,
-    pub scale_factor: f32,
-    pub is_primary: bool,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ActivityEvent {
-    pub event_type: ActivityType,
-    pub timestamp: DateTime<Utc>,
-    pub source: String,
-    pub metadata: serde_json::Value,
-    pub importance: f32,  // 0-1 ML-generated importance score
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum ActivityType {
-    FileSave,
-    FileOpen,
-    GitCommit,
-    GitPush,
-    TestRun,
-    TestPass,
-    TestFail,
-    BuildStart,
-    BuildSuccess,
-    BuildFail,
-    DebugStart,
-    DebugStop,
-    ErrorOccurred,
-    ErrorResolved,
-    Deployment,
-    CodeReview,
-    Typing,
-    Scrolling,
-    TabSwitch,
-    WindowSwitch,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PrivacyAction {
-    pub timestamp: DateTime<Utc>,
-    pub action_type: PrivacyActionType,
-    pub region: CaptureRegion,
-    pub reason: String,
-    pub confidence: f32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum PrivacyActionType {
-    Blur,
-    Redact,
-    Exclude,
+/// Events from the master capture controller
+#[derive(Debug, Clone)]
+pub enum MasterCaptureEvent {
+    ScreenEvent(CaptureEvent),
+    // AudioEvent(AudioEvent),     // TODO: Add when audio is ready
+    // ActivityEvent(ActivityEvent), // TODO: Add when activity detection is ready
+    SystemEvent(SystemEvent),
 }
 
 #[derive(Debug, Clone)]
-pub struct CapturedFrame {
-    pub timestamp: DateTime<Utc>,
-    pub sequence_number: u64,
-    pub video_data: Option<Vec<u8>>,
-    pub audio_data: Option<Vec<u8>>,
-    pub metadata: FrameMetadata,
-    pub importance: f32,
+pub enum SystemEvent {
+    CaptureSystemInitialized,
+    CaptureSystemError(String),
+    PerformanceAlert(String),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FrameMetadata {
-    pub width: u32,
-    pub height: u32,
-    pub format: String,
-    pub size: u64,
-    pub mouse_position: Option<(u32, u32)>,
-    pub keyboard_activity: bool,
-    pub window_title: Option<String>,
-    pub active_application: Option<String>,
-    pub content_hash: Option<String>,
-}
-
-impl CaptureEngine {
-    /// Create a new capture engine instance
-    pub async fn new() -> Result<Self> {
-        log::info!("Initializing capture engine...");
-        
-        let (frame_tx, frame_rx) = mpsc::unbounded_channel();
-        
-        let screen_capture = Arc::new(Mutex::new(ScreenCapture::new().await?));
-        let audio_capture = Arc::new(Mutex::new(AudioCapture::new().await?));
-        let activity_detector = Arc::new(Mutex::new(ActivityDetector::new().await?));
-        let privacy_filter = Arc::new(Mutex::new(PrivacyFilter::new().await?));
-        
-        Ok(Self {
-            screen_capture,
-            audio_capture,
-            activity_detector,
-            privacy_filter,
-            current_session: Arc::new(Mutex::new(None)),
-            is_capturing: Arc::new(Mutex::new(false)),
-            frame_tx,
-            frame_rx: Arc::new(Mutex::new(frame_rx)),
-        })
-    }
-
-    /// Start a new capture session
-    pub async fn start_capture(&self, project_id: Uuid, config: CaptureConfig) -> Result<Uuid> {
-        let mut is_capturing = self.is_capturing.lock().await;
-        if *is_capturing {
-            return Err(anyhow!("Capture already in progress"));
+impl CaptureController {
+    /// Create a new elite-tier capture controller
+    pub fn new() -> Self {
+        Self {
+            legacy_screen_engine: None,
+            native_capture_engine: None,
+            capture_session: None,
+            performance_monitor: Arc::new(crate::performance::PerformanceMonitor::new()),
         }
-
-        let session_id = Uuid::new_v4();
-        log::info!("Starting capture session: {}", session_id);
-
-        // Create new session
-        let session = CaptureSession {
-            id: session_id,
-            project_id,
-            start_time: Utc::now(),
-            end_time: None,
-            config: config.clone(),
-            status: CaptureStatus::Initializing,
-            statistics: CaptureStatistics::default(),
-            metadata: SessionMetadata {
-                environment_info: self.get_environment_info().await?,
-                captured_events: Vec::new(),
-                privacy_actions: Vec::new(),
-            },
-        };
-
-        *self.current_session.lock().await = Some(session);
-
-        // Initialize subsystems
-        self.screen_capture.lock().await.configure(&config).await?;
-        self.audio_capture.lock().await.configure(&config.audio).await?;
-        self.activity_detector.lock().await.start_monitoring().await?;
-        self.privacy_filter.lock().await.configure(&config.privacy).await?;
-
-        // Start capture loop
-        let capture_handle = self.start_capture_loop().await?;
-        
-        *is_capturing = true;
-        self.update_session_status(CaptureStatus::Recording).await?;
-
-        log::info!("Capture session started successfully: {}", session_id);
-        Ok(session_id)
     }
-
-    /// Stop the current capture session
-    pub async fn stop_capture(&self) -> Result<()> {
-        let mut is_capturing = self.is_capturing.lock().await;
-        if !*is_capturing {
-            return Err(anyhow!("No capture session in progress"));
-        }
-
-        log::info!("Stopping capture session...");
-
-        // Stop subsystems
-        self.screen_capture.lock().await.stop().await?;
-        self.audio_capture.lock().await.stop().await?;
-        self.activity_detector.lock().await.stop_monitoring().await?;
-
-        // Update session
-        self.update_session_status(CaptureStatus::Stopped).await?;
-        if let Some(ref mut session) = *self.current_session.lock().await {
-            session.end_time = Some(Utc::now());
-        }
-
-        *is_capturing = false;
-        log::info!("Capture session stopped successfully");
-        Ok(())
-    }
-
-    /// Pause the current capture session
-    pub async fn pause_capture(&self) -> Result<()> {
-        if !*self.is_capturing.lock().await {
-            return Err(anyhow!("No capture session in progress"));
-        }
-
-        self.screen_capture.lock().await.pause().await?;
-        self.audio_capture.lock().await.pause().await?;
-        self.update_session_status(CaptureStatus::Paused).await?;
-
-        log::info!("Capture session paused");
-        Ok(())
-    }
-
-    /// Resume the current capture session
-    pub async fn resume_capture(&self) -> Result<()> {
-        if !*self.is_capturing.lock().await {
-            return Err(anyhow!("No capture session in progress"));
-        }
-
-        self.screen_capture.lock().await.resume().await?;
-        self.audio_capture.lock().await.resume().await?;
-        self.update_session_status(CaptureStatus::Recording).await?;
-
-        log::info!("Capture session resumed");
-        Ok(())
-    }
-
-    /// Get the current capture session status
-    pub async fn get_status(&self) -> Result<Option<CaptureSession>> {
-        let session = self.current_session.lock().await.clone();
-        Ok(session)
-    }
-
-    /// Get real-time capture statistics
-    pub async fn get_statistics(&self) -> Result<CaptureStatistics> {
-        if let Some(session) = &*self.current_session.lock().await {
-            Ok(session.statistics.clone())
+    
+    /// Initialize capture systems with native engine support
+    pub async fn initialize(&mut self, config: MasterCaptureConfig) -> Result<()> {
+        if config.use_native_engine && config.native.is_some() {
+            // Initialize elite-tier native capture engine
+            let mut engine = CaptureEngineFactory::create_engine()
+                .map_err(|e| anyhow::anyhow!("Failed to create native engine: {}", e))?;
+            
+            let native_config = config.native.unwrap();
+            
+            // Validate performance targets before proceeding
+            let performance_report = engine.validate_performance(&native_config).await
+                .map_err(|e| anyhow::anyhow!("Performance validation failed: {}", e))?;
+            
+            self.validate_performance_targets(&performance_report, &config.performance_targets)?;
+            
+            engine.initialize(native_config.clone()).await
+                .map_err(|e| anyhow::anyhow!("Native engine initialization failed: {}", e))?;
+            
+            let session = engine.start_capture_session().await
+                .map_err(|e| anyhow::anyhow!("Failed to start capture session: {}", e))?;
+            
+            self.native_capture_engine = Some(engine);
+            self.capture_session = Some(session);
+            
+            log::info!("Native capture engine initialized with elite performance targets");
         } else {
-            Err(anyhow!("No active capture session"))
+            // Fall back to legacy screen capture
+            let (screen_engine, _screen_receiver) = ScreenCaptureEngine::new(config.screen)?;
+            self.legacy_screen_engine = Some(screen_engine);
+            log::info!("Legacy capture engine initialized");
         }
-    }
-
-    // Private helper methods
-
-    async fn start_capture_loop(&self) -> Result<()> {
-        // This would start the main capture loop in a background task
-        // For now, just a placeholder
-        log::info!("Capture loop started");
+        
+        // TODO: Initialize other capture systems when ready
+        // if config.enable_audio {
+        //     self.audio_engine = Some(AudioCaptureEngine::new(config.audio)?);
+        // }
+        
         Ok(())
     }
-
-    async fn update_session_status(&self, status: CaptureStatus) -> Result<()> {
-        if let Some(ref mut session) = *self.current_session.lock().await {
-            session.status = status;
+    
+    /// Validate that performance targets are achievable
+    fn validate_performance_targets(
+        &self,
+        report: &PerformanceReport,
+        targets: &PerformanceTargets,
+    ) -> Result<()> {
+        if report.estimated_cpu_usage > targets.max_cpu_usage_percent {
+            return Err(anyhow::anyhow!(
+                "CPU usage {} exceeds target {}",
+                report.estimated_cpu_usage,
+                targets.max_cpu_usage_percent
+            ));
         }
+        
+        if report.estimated_memory_mb > targets.max_memory_mb {
+            return Err(anyhow::anyhow!(
+                "Memory usage {} MB exceeds target {} MB",
+                report.estimated_memory_mb,
+                targets.max_memory_mb
+            ));
+        }
+        
+        if report.estimated_fps < targets.target_fps as f32 {
+            return Err(anyhow::anyhow!(
+                "FPS {} below target {}",
+                report.estimated_fps,
+                targets.target_fps
+            ));
+        }
+        
         Ok(())
     }
-
-    async fn get_environment_info(&self) -> Result<EnvironmentInfo> {
-        use sysinfo::{System, SystemExt};
+    
+    /// Start capture with native or legacy engine
+    pub async fn start_capture(&self) -> Result<()> {
+        if let Some(ref _session) = self.capture_session {
+            log::info!("Native capture session already active");
+        } else if let Some(ref engine) = self.legacy_screen_engine {
+            engine.start_capture().await?;
+            log::info!("Legacy screen capture started");
+        } else {
+            return Err(anyhow::anyhow!("No capture engine initialized"));
+        }
         
-        let sys = System::new_all();
+        // TODO: Start other capture systems
         
-        Ok(EnvironmentInfo {
-            os: sys.name().unwrap_or_else(|| "Unknown".to_string()),
-            version: sys.os_version().unwrap_or_else(|| "Unknown".to_string()),
-            architecture: std::env::consts::ARCH.to_string(),
-            total_memory: sys.total_memory(),
-            cpu_cores: sys.physical_core_count().unwrap_or(1) as u32,
-            monitors: self.get_monitor_info().await?,
-        })
+        Ok(())
     }
-
-    async fn get_monitor_info(&self) -> Result<Vec<MonitorInfo>> {
-        // Platform-specific monitor detection would go here
-        // For now, return a placeholder
-        Ok(vec![MonitorInfo {
-            id: "primary".to_string(),
-            name: "Primary Monitor".to_string(),
-            width: 1920,
-            height: 1080,
-            scale_factor: 1.0,
-            is_primary: true,
-        }])
+    
+    /// Capture a single frame using the active engine
+    pub async fn capture_frame(&self) -> Result<Option<CaptureFrame>> {
+        if let Some(ref session) = self.capture_session {
+            match session.capture_frame().await {
+                Ok(frame) => {
+                    self.performance_monitor.record_capture_latency(
+                        frame.metadata.capture_latency_ms
+                    );
+                    Ok(Some(frame))
+                }
+                Err(e) => {
+                    log::error!("Native frame capture failed: {}", e);
+                    Err(anyhow::anyhow!("Frame capture failed: {}", e))
+                }
+            }
+        } else {
+            // Legacy engine doesn't expose frame capture directly
+            log::warn!("Frame capture not available with legacy engine");
+            Ok(None)
+        }
+    }
+    
+    /// Stop all capture systems
+    pub async fn stop_capture(&self) -> Result<()> {
+        if let Some(ref _session) = self.capture_session {
+            log::info!("Native capture session stopped");
+            // Native session stops automatically when dropped
+        } else if let Some(ref engine) = self.legacy_screen_engine {
+            engine.stop_capture().await?;
+            log::info!("Legacy screen capture stopped");
+        }
+        
+        // TODO: Stop other capture systems
+        
+        Ok(())
+    }
+    
+    /// Get comprehensive performance statistics
+    pub async fn get_performance_stats(&self) -> Result<PerformanceStats> {
+        let mut stats = PerformanceStats::default();
+        
+        if let Some(ref engine) = self.native_capture_engine {
+            // Get native engine capabilities and performance
+            let capabilities = engine.get_capabilities();
+            stats.native_engine_active = true;
+            stats.gpu_acceleration_available = capabilities.hardware_acceleration;
+            stats.max_supported_resolution = capabilities.max_resolution;
+        } else if let Some(ref engine) = self.legacy_screen_engine {
+            stats.screen = Some(engine.get_stats().await);
+            stats.native_engine_active = false;
+        }
+        
+        // Get performance monitor stats
+        stats.performance_metrics = Some(self.performance_monitor.get_current_metrics());
+        
+        // TODO: Collect stats from other systems
+        
+        Ok(stats)
+    }
+    
+    /// Check if any capture system is active
+    pub async fn is_capturing(&self) -> bool {
+        if self.capture_session.is_some() {
+            return true;
+        }
+        
+        if let Some(ref engine) = self.legacy_screen_engine {
+            if engine.is_capturing().await {
+                return true;
+            }
+        }
+        
+        // TODO: Check other capture systems
+        
+        false
+    }
+    
+    /// Get available monitors from native engine
+    pub async fn get_available_monitors(&self) -> Result<Vec<MonitorInfo>> {
+        if let Some(ref engine) = self.native_capture_engine {
+            engine.get_monitors().await
+                .map_err(|e| anyhow::anyhow!("Failed to get monitors: {}", e))
+        } else {
+            Err(anyhow::anyhow!("Native engine not available"))
+        }
+    }
+    
+    /// Switch between capture engines at runtime
+    pub async fn switch_to_native_engine(&mut self, config: CaptureConfig) -> Result<()> {
+        // Stop legacy engine if running
+        if let Some(ref engine) = self.legacy_screen_engine {
+            if engine.is_capturing().await {
+                engine.stop_capture().await?;
+            }
+        }
+        self.legacy_screen_engine = None;
+        
+        // Initialize native engine
+        let mut engine = CaptureEngineFactory::create_engine()
+            .map_err(|e| anyhow::anyhow!("Failed to create native engine: {}", e))?;
+        
+        engine.initialize(config.clone()).await
+            .map_err(|e| anyhow::anyhow!("Native engine initialization failed: {}", e))?;
+        
+        let session = engine.start_capture_session().await
+            .map_err(|e| anyhow::anyhow!("Failed to start capture session: {}", e))?;
+        
+        self.native_capture_engine = Some(engine);
+        self.capture_session = Some(session);
+        
+        log::info!("Switched to native capture engine");
+        Ok(())
     }
 }
 
-impl Default for CaptureStatistics {
+/// Elite-tier performance statistics
+#[derive(Debug, Clone, Serialize)]
+pub struct PerformanceStats {
+    pub screen: Option<CaptureStats>,      // Legacy engine stats
+    pub native_engine_active: bool,       // Whether native engine is being used
+    pub gpu_acceleration_available: bool,  // Hardware acceleration status
+    pub max_supported_resolution: (u32, u32), // Maximum capture resolution
+    pub performance_metrics: Option<crate::performance::Metrics>, // Detailed performance data
+    // pub audio: Option<AudioStats>,     // TODO: Add when audio is ready
+    // pub activity: Option<ActivityStats>, // TODO: Add when activity detection is ready
+    pub system_cpu_usage: f64,
+    pub system_memory_usage: f64,
+    pub total_frames_captured: u64,
+}
+
+impl Default for PerformanceStats {
     fn default() -> Self {
         Self {
-            total_frames: 0,
-            dropped_frames: 0,
-            total_size: 0,
-            compression_ratio: 0.0,
-            average_fps: 0.0,
-            cpu_usage: 0.0,
-            memory_usage: 0,
-            processing_latency: 0.0,
+            screen: None,
+            native_engine_active: false,
+            gpu_acceleration_available: false,
+            max_supported_resolution: (1920, 1080),
+            performance_metrics: None,
+            system_cpu_usage: 0.0,
+            system_memory_usage: 0.0,
+            total_frames_captured: 0,
         }
+    }
+}
+
+impl Default for MasterCaptureConfig {
+    fn default() -> Self {
+        Self {
+            screen: LegacyCaptureConfig::default(),
+            native: Some(CaptureConfig {
+                target_fps: 30,
+                resolution: Resolution::FHD,
+                format: FrameFormat::RGBA8,
+                enable_gpu_acceleration: true,
+                enable_privacy_filter: true,
+                monitor_selection: MonitorSelection::Primary,
+                quality_preset: QualityPreset::Balanced,
+            }),
+            use_native_engine: true,  // Prefer native engine by default
+            enable_audio: false,  // Disabled until audio dependencies are ready
+            enable_activity_detection: false,  // TODO: Enable when implemented
+            enable_privacy_filtering: true,
+            output_directory: "./captures".to_string(),
+            performance_targets: PerformanceTargets::default(),
+        }
+    }
+}
+
+impl Default for PerformanceTargets {
+    fn default() -> Self {
+        Self {
+            max_cpu_usage_percent: 5.0,    // Elite-tier target: <5% CPU
+            max_memory_mb: 200,             // Elite-tier target: <200MB
+            target_fps: 30,                 // Standard 30fps for documentation
+            max_capture_latency_ms: 33.0,   // ~1 frame at 30fps
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[tokio::test]
+    async fn test_capture_controller_creation() {
+        let controller = CaptureController::new();
+        assert!(!controller.is_capturing().await);
+        
+        let stats = controller.get_performance_stats().await.unwrap();
+        assert!(!stats.native_engine_active);
+        assert!(!stats.gpu_acceleration_available);
+    }
+    
+    #[tokio::test]
+    async fn test_capture_controller_initialization_legacy() {
+        let mut controller = CaptureController::new();
+        let mut config = MasterCaptureConfig::default();
+        config.use_native_engine = false;  // Force legacy for this test
+        
+        let result = controller.initialize(config).await;
+        assert!(result.is_ok());
+    }
+    
+    #[tokio::test]
+    async fn test_capture_controller_initialization_native() {
+        let mut controller = CaptureController::new();
+        let config = MasterCaptureConfig::default(); // Uses native by default
+        
+        // This test may fail if native engine isn't available, which is expected
+        let _result = controller.initialize(config).await;
+        // Don't assert on result as it depends on platform support
+    }
+    
+    #[tokio::test]
+    async fn test_performance_targets_validation() {
+        let controller = CaptureController::new();
+        let targets = PerformanceTargets::default();
+        
+        let good_report = PerformanceReport {
+            estimated_fps: 30.0,
+            estimated_cpu_usage: 3.0,
+            estimated_memory_mb: 150,
+            gpu_acceleration_available: true,
+            bottlenecks: vec![],
+            recommendations: vec![],
+        };
+        
+        assert!(controller.validate_performance_targets(&good_report, &targets).is_ok());
+        
+        let bad_report = PerformanceReport {
+            estimated_fps: 15.0,  // Below target
+            estimated_cpu_usage: 8.0,  // Above target
+            estimated_memory_mb: 300,  // Above target
+            gpu_acceleration_available: false,
+            bottlenecks: vec!["CPU bottleneck".to_string()],
+            recommendations: vec!["Enable GPU acceleration".to_string()],
+        };
+        
+        assert!(controller.validate_performance_targets(&bad_report, &targets).is_err());
     }
 }

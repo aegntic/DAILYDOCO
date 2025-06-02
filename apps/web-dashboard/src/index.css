@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900;
+    @apply bg-400% animate-gradient;
+    @apply text-white min-h-screen;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl p-8 shadow-2xl;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-accent-500;
+    @apply text-white font-semibold py-3 px-8 rounded-xl;
+    @apply shadow-lg hover:shadow-2xl transform hover:scale-105;
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .btn-secondary {
+    @apply glass text-white font-semibold py-3 px-8 rounded-xl;
+    @apply hover:bg-white/20 transform hover:scale-105;
+    @apply transition-all duration-200 ease-out;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-400 to-accent-400;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .hero-gradient {
+    @apply bg-gradient-to-r from-primary-600 via-accent-600 to-primary-600;
+    @apply bg-400% animate-gradient;
+  }
+}

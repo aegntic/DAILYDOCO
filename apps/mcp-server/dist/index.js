@@ -21,6 +21,7 @@ import { AuthenticityEngine } from './tools/authenticity-engine.js';
 import { PerformanceMonitor } from './tools/performance-monitor.js';
 import { VideoCompiler } from './tools/video-compiler.js';
 import { ProjectFingerprinter } from './tools/project-fingerprinter.js';
+import { ModularAIEngine } from './tools/ai-models.js';
 /**
  * Main MCP Server class for DailyDoco Pro
  */
@@ -34,16 +35,12 @@ class DailyDocoMCPServer {
     performanceMonitor;
     videoCompiler;
     projectFingerprinter;
+    aiEngine;
     constructor() {
         this.server = new Server({
             name: 'dailydoco-pro',
             version: '1.0.0',
             description: 'DailyDoco Pro MCP Server - Elite automated documentation platform',
-        }, {
-            capabilities: {
-                tools: {},
-                logging: {},
-            },
         });
         // Initialize tool handlers
         this.projectAnalyzer = new ProjectAnalyzer();
@@ -54,6 +51,7 @@ class DailyDocoMCPServer {
         this.performanceMonitor = new PerformanceMonitor();
         this.videoCompiler = new VideoCompiler();
         this.projectFingerprinter = new ProjectFingerprinter();
+        this.aiEngine = new ModularAIEngine();
         this.setupHandlers();
     }
     setupHandlers() {

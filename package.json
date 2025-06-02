@@ -4,9 +4,10 @@
   "description": "DailyDoco Pro - Elite-tier automated documentation platform",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "libs/*",
-    "tools/*"
+    "apps/mcp-server",
+    "apps/web-dashboard", 
+    "apps/api-server",
+    "libs/shared-types"
   ],
   "scripts": {
     "build": "nx run-many --target=build --all",
@@ -24,7 +25,6 @@
     "@nx/workspace": "^17.0.0",
     "@nx/js": "^17.0.0",
     "@nx/node": "^17.0.0",
-    "@nx/rust": "^17.0.0",
     "@nx/web": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

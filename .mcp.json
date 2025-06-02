@@ -1,0 +1,124 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/tabs"],
+      "disabled": false
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "disabled": false
+    },
+    "memory": {
+      "command": "/usr/local/bin/mcp-server-memory",
+      "args": [],
+      "disabled": false
+    },
+    "sequentialthinking": {
+      "command": "/usr/local/bin/mcp-server-sequential-thinking",
+      "args": [],
+      "disabled": false
+    },
+    "puppeteer": {
+      "command": "/usr/local/bin/mcp-server-puppeteer",
+      "args": [],
+      "disabled": false
+    },
+    "fetch": {
+      "command": "/usr/local/bin/mcp-fetch",
+      "args": [],
+      "disabled": false
+    },
+    "time": {
+      "command": "uvx",
+      "args": ["mcp-server-time"],
+      "disabled": false
+    },
+    "docker": {
+      "command": "uvx",
+      "args": ["mcp-server-docker"],
+      "disabled": false
+    },
+    "crawl4ai": {
+      "command": "uvx",
+      "args": ["crawl4ai-mcp-server"],
+      "disabled": false
+    },
+    "sandbox": {
+      "command": "uvx",
+      "args": ["mcp-server-shell @ git+https://github.com/emsi/mcp-server-shell"],
+      "disabled": false
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["@upstash/context7-mcp@latest"],
+      "disabled": false
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-brave-search"],
+      "disabled": false
+    },
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "disabled": false
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["@notionhq/notion-mcp-server"],
+      "disabled": false
+    },
+    "n8n": {
+      "command": "npx",
+      "args": ["@nazcamedia/n8n-mcp-server"],
+      "disabled": false
+    },
+    "postman": {
+      "command": "uvx",
+      "args": ["postman-mcp-server"],
+      "disabled": false
+    },
+    "mcp-framework": {
+      "command": "npx",
+      "args": ["mcp-framework"],
+      "disabled": false
+    },
+    "youtube": {
+      "command": "npx",
+      "args": ["youtube-data-mcp-server"],
+      "disabled": false
+    },
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["@smithery/cli", "run", "@wonderwhy-er/desktop-commander"],
+      "disabled": false
+    },
+    "postgresql": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-postgres"],
+      "disabled": false
+    },
+    "web-search": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-tavily"],
+      "disabled": false
+    },
+    "prompts": {
+      "command": "uvx",
+      "args": ["mcp-server-prompts"],
+      "disabled": false
+    },
+    "taskmaster": {
+      "command": "uvx",
+      "args": ["mcp-server-taskmaster"],
+      "disabled": false
+    },
+    "smithery": {
+      "command": "npx",
+      "args": ["@smithery/cli", "run", "@smithery/toolbox"],
+      "disabled": false
+    }
+  }
+}

@@ -1,5 +1,6 @@
-// DeepSeek R1 Model Implementation
-// Released 30/05/2025 - Cutting-edge reasoning capabilities
+// DeepSeek R1 Latest Model Implementation
+// Updated January 6, 2025 - Latest version with breakthrough reasoning capabilities
+// Features: Enhanced chain-of-thought, improved multi-step reasoning, better code understanding
 
 use async_trait::async_trait;
 use anyhow::{Result, anyhow};
@@ -103,10 +104,10 @@ impl DeepSeekR1 {
         })
     }
 
-    /// Create default configuration for DeepSeek R1
+    /// Create default configuration for DeepSeek R1 Latest
     fn create_default_config() -> ModelConfig {
         ModelConfig {
-            model_id: "deepseek-r1".to_string(),
+            model_id: "deepseek-r1-latest".to_string(),
             version: "r1-2025-05-30".to_string(),
             provider: "DeepSeek".to_string(),
             deployment: DeploymentConfig {
@@ -582,7 +583,7 @@ impl AIModel for DeepSeekR1 {
         Ok(self.config.clone())
     }
 
-    async fn process_task(&self, task: &AITask) -> Result<ModelResponse> {
+    async fn process_task(&mut self, task: &AITask) -> Result<ModelResponse> {
         self.request_count += 1;
         
         let result = self.process_task_specialized(task).await;

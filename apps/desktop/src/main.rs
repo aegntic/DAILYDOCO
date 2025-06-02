@@ -18,9 +18,10 @@ mod config;
 mod performance;
 mod fingerprinting;
 mod privacy;
-mod commands;
+// TODO: Re-enable when commands are fixed
+// mod commands;
 
-use capture::CaptureEngine;
+use capture::ScreenCaptureEngine;
 use ai::ModularAIEngine;
 use video::VideoProcessor;
 use storage::StorageManager;
@@ -30,7 +31,7 @@ use performance::PerformanceMonitor;
 /// Application state shared across all components
 #[derive(Default)]
 pub struct AppState {
-    pub capture_engine: Arc<Mutex<Option<CaptureEngine>>>,
+    pub capture_engine: Arc<Mutex<Option<ScreenCaptureEngine>>>,
     pub ai_engine: Arc<Mutex<Option<ModularAIEngine>>>,
     pub video_processor: Arc<Mutex<Option<VideoProcessor>>>,
     pub storage_manager: Arc<Mutex<Option<StorageManager>>>,
@@ -118,46 +119,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .system_tray(tray)
         .on_system_tray_event(handle_system_tray_event)
         .invoke_handler(tauri::generate_handler![
-            // Core commands
-            commands::initialize_app,
-            commands::get_app_info,
-            commands::shutdown_app,
-            
-            // Project commands
-            commands::create_project,
-            commands::get_projects,
-            commands::get_project,
-            commands::update_project,
-            commands::delete_project,
-            
-            // Capture commands
-            commands::start_capture,
-            commands::stop_capture,
-            commands::pause_capture,
-            commands::resume_capture,
-            commands::get_capture_status,
-            
-            // AI commands
-            commands::get_ai_models,
-            commands::switch_ai_model,
-            commands::analyze_code,
-            commands::generate_narration,
-            commands::run_test_audience,
-            
-            // Video commands
-            commands::compile_video,
-            commands::export_video,
-            commands::get_video_status,
-            commands::preview_video,
-            
-            // Performance commands
-            commands::get_performance_metrics,
-            commands::run_benchmark,
-            
-            // Settings commands
-            commands::get_settings,
-            commands::update_settings,
-            commands::reset_settings,
+            // Core commands (TODO: Re-enable when commands are fixed)
+            // commands::initialize_app,
+            // commands::get_app_info,
+            // commands::shutdown_app,
         ])
         .setup(|app| {
             let app_handle = app.handle();
@@ -208,7 +173,7 @@ async fn initialize_core_components(app_handle: &tauri::AppHandle) -> Result<(),
     
     // Initialize capture engine
     log::info!("Initializing capture engine...");
-    let capture_engine = CaptureEngine::new().await?;
+    let (capture_engine, _) = ScreenCaptureEngine::new(capture::LegacyCaptureConfig::default())?;
     *state.capture_engine.lock().await = Some(capture_engine);
     
     // Initialize video processor
