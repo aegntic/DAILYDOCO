@@ -95,7 +95,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const AUTHORS: &str = env!("CARGO_PKG_AUTHORS");
 pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 
-/// Initialize HUMaiN2.7 with default configuration
+/// Initialize aegnt-27 with default configuration
 /// 
 /// This function sets up logging and validates the runtime environment.
 /// Should be called once at the start of your application.
@@ -103,13 +103,13 @@ pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 /// # Examples
 ///
 /// ```no_run
-/// use humain27;
+/// use aegnt_27;
 ///
 /// #[tokio::main]
 /// async fn main() -> Result<(), Box<dyn std::error::Error>> {
-///     humain27::init().await?;
+///     aegnt_27::init().await?;
 ///     
-///     // Your HUMaiN2.7 code here
+///     // Your aegnt-27 code here
 ///     
 ///     Ok(())
 /// }
@@ -122,19 +122,19 @@ pub async fn init() -> utils::Result<()> {
     
     env_logger::try_init().ok(); // Ignore error if already initialized
     
-    log::info!("HUMaiN2.7 v{} initializing...", VERSION);
+    log::info!("aegnt-27 v{} initializing...", VERSION);
     log::info!("Authors: {}", AUTHORS);
     log::info!("Description: {}", DESCRIPTION);
     
     // Validate runtime environment
     utils::validate_environment().await?;
     
-    log::info!("HUMaiN2.7 initialization complete");
+    log::info!("aegnt-27 initialization complete");
     
     Ok(())
 }
 
-/// Initialize HUMaiN2.7 with custom configuration
+/// Initialize aegnt-27 with custom configuration
 ///
 /// # Examples
 ///
@@ -153,7 +153,7 @@ pub async fn init() -> utils::Result<()> {
 ///     
 ///     humain27::init_with_config(config).await?;
 ///     
-///     // Your HUMaiN2.7 code here
+///     // Your aegnt-27 code here
 ///     
 ///     Ok(())
 /// }
@@ -167,7 +167,7 @@ pub async fn init_with_config(config: config::HumainConfig) -> utils::Result<()>
         env_logger::try_init().ok();
     }
     
-    log::info!("HUMaiN2.7 v{} initializing with custom config...", VERSION);
+    log::info!("aegnt-27 v{} initializing with custom config...", VERSION);
     
     // Validate configuration
     config.validate()?;
@@ -175,7 +175,7 @@ pub async fn init_with_config(config: config::HumainConfig) -> utils::Result<()>
     // Validate runtime environment
     utils::validate_environment().await?;
     
-    log::info!("HUMaiN2.7 initialization complete with custom config");
+    log::info!("aegnt-27 initialization complete with custom config");
     
     Ok(())
 }

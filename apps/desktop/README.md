@@ -1,13 +1,13 @@
-# HUMaiN2.7 🧠🔒
+# aegnt-27 🧠🔒
 
-**Human-like Ultra-Modern AI Neutralization System 2.7**
+**Autonomous Elite Generation Neural Technology System 2.7**
 
 [![Crates.io](https://img.shields.io/crates/v/humain27.svg)](https://crates.io/crates/humain27)
 [![Documentation](https://docs.rs/humain27/badge.svg)](https://docs.rs/humain27)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://github.com/aegntic/humain27/workflows/CI/badge.svg)](https://github.com/aegntic/humain27/actions)
 
-A cutting-edge Rust library that provides comprehensive AI detection evasion and human-like behavior simulation. HUMaiN2.7 offers state-of-the-art humanization techniques for automated systems, ensuring authentic human-like interactions while maintaining privacy and avoiding AI detection.
+A cutting-edge Rust library that provides comprehensive AI detection evasion and human-like behavior simulation. aegnt-27 offers state-of-the-art humanization techniques for automated systems, ensuring authentic human-like interactions while maintaining privacy and avoiding AI detection.
 
 ## 🚀 Key Features
 
@@ -44,17 +44,17 @@ A cutting-edge Rust library that provides comprehensive AI detection evasion and
 
 ## 📦 Installation
 
-Add HUMaiN2.7 to your `Cargo.toml`:
+Add aegnt-27 to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-humain27 = "2.7.0"
+aegnt-27 = "2.7.0"
 
 # For full feature set including ML models
-humain27 = { version = "2.7.0", features = ["full"] }
+aegnt-27 = { version = "2.7.0", features = ["full"] }
 
 # For basic humanization only
-humain27 = { version = "2.7.0", features = ["basic-humanization"] }
+aegnt-27 = { version = "2.7.0", features = ["basic-humanization"] }
 ```
 
 ## 🏁 Quick Start
@@ -62,7 +62,7 @@ humain27 = { version = "2.7.0", features = ["basic-humanization"] }
 ### Basic Mouse Humanization
 
 ```rust
-use humain27::prelude::*;
+use aegnt_27::prelude::*;
 use humain27::mouse::{MouseHumanizer, MousePath, MousePoint, Coordinates};
 
 #[tokio::main]
@@ -121,7 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### AI Detection Validation
 
 ```rust
-use humain27::prelude::*;
+use aegnt_27::prelude::*;
 use humain27::detection::{AIDetectionValidator, ValidationInput, ContentType, ContentData};
 
 #[tokio::main]

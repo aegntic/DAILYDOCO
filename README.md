@@ -201,7 +201,7 @@ dailydoco export --platform youtube --quality 1080p
 │  - Multi-source   │  - Narration Gen  │  - Engagement Pred │
 │  - Privacy Filter │  - Voice Synth    │  - Optimization    │
 ├─────────────────────────────────────────────────────────────┤
-│  HUMaiN2.7 System │  Video Pipeline   │  Export Manager    │
+│  aegnt-27 System  │  Video Pipeline   │  Export Manager    │
 │  - Mouse/Typing   │  - Smart Editing  │  - Multi-platform  │
 │  - Speech/Audio   │  - Pacing Engine  │  - Quality Gates   │
 │  - Visual/Detect  │  - Transitions    │  - Privacy Check   │

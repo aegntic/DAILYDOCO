@@ -1,10 +1,10 @@
 [package]
-name = "humain27"
+name = "aegnt-27"
 version = "2.7.0"
 edition = "2021"
 authors = ["Aegntic Team <team@aegntic.com>"]
-description = "HUMaiN2.7 - Human-like Ultra-Modern AI Neutralization System"
-repository = "https://github.com/aegntic/humain27"
+description = "aegnt-27 - Autonomous Elite Generation Neural Technology System"
+repository = "https://github.com/aegntic/aegnt27"
 license = "MIT"
 keywords = ["ai-detection", "humanization", "authenticity", "automation", "privacy"]
 categories = ["multimedia", "authentication", "simulation"]
