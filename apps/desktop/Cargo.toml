@@ -25,7 +25,7 @@ futures.workspace = true
 async-trait.workspace = true
 parking_lot.workspace = true
 
-# Internal workspace crates
+# Internal workspace crates  
 aegnt-27.workspace = true
 shared-types.workspace = true
 
@@ -123,10 +123,4 @@ debug = true
 name = "dailydoco-desktop"
 path = "src/main.rs"
 
-[[example]]
-name = "capture_demo"
-required-features = ["desktop-capture"]
-
-[[example]]
-name = "ai_commentary"
-required-features = ["ai-commentary"]
+# Examples will be added later

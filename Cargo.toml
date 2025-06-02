@@ -2,15 +2,8 @@
 resolver = "2"
 members = [
     "apps/desktop",
-    "apps/mcp-server", 
-    "apps/browser-ext",
     "libs/aegnt-27",
-    "libs/shared-types",
-    "libs/ai-models",
-    "libs/capture-engine", 
-    "libs/performance-monitor",
-    "libs/test-audience",
-    "libs/video-proc"
+    "libs/shared-types"
 ]
 
 [workspace.package]
