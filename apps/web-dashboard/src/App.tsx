@@ -1,4 +1,4 @@
-import React from 'react';
+// React import removed for TypeScript compilation
 import { motion } from 'framer-motion';
 import { 
   PlayIcon, 
