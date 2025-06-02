@@ -55,19 +55,19 @@ use std::sync::Arc;
 use tokio::sync::OnceCell;
 
 /// Global Aegnt27 engine instance
-static HUMAIN_ENGINE: OnceCell<Arc<Aegnt27Engine>> = OnceCell::const_new();
+static AEGNT_ENGINE: OnceCell<Arc<Aegnt27Engine>> = OnceCell::const_new();
 
 /// Initialize the global Aegnt27 engine
 pub async fn initialize_engine(config: Aegnt27Config) -> Result<(), Aegnt27Error> {
     let engine = Arc::new(Aegnt27Engine::with_config(config).await?);
-    HUMAIN_ENGINE.set(engine)
+    AEGNT_ENGINE.set(engine)
         .map_err(|_| Aegnt27Error::InternalError("Engine already initialized".to_string()))?;
     Ok(())
 }
 
 /// Get the global Aegnt27 engine instance
 pub fn get_engine() -> Result<Arc<Aegnt27Engine>, Aegnt27Error> {
-    HUMAIN_ENGINE.get()
+    AEGNT_ENGINE.get()
         .ok_or_else(|| Aegnt27Error::InternalError("Engine not initialized".to_string()))
         .map(Arc::clone)
 }

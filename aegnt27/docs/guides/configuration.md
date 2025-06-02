@@ -106,11 +106,11 @@ use std::env;
 
 let config = Aegnt27Config::builder()
     .typing(TypingConfig {
-        base_wpm: env::var("HUMAIN_BASE_WPM")
+        base_wpm: env::var("AEGNT_BASE_WPM")
             .unwrap_or("70.0".to_string())
             .parse()
             .unwrap_or(70.0),
-        error_rate: env::var("HUMAIN_ERROR_RATE")
+        error_rate: env::var("AEGNT_ERROR_RATE")
             .unwrap_or("0.02".to_string())
             .parse()
             .unwrap_or(0.02),
