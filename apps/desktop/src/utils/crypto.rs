@@ -1,10 +1,10 @@
 /*!
- * HUMaiN2.7 - Cryptography Utilities
+ * aegnt-27 - Cryptography Utilities
  * 
  * Secure cryptographic functions for data protection and authentication
  */
 
-use crate::utils::{HumainError, Result};
+use crate::utils::{AegntError, Result};
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use aes_gcm::aead::{Aead, KeyInit, OsRng};
 use sha2::{Sha256, Digest};

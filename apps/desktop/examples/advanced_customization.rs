@@ -1,16 +1,16 @@
 /*!
- * HUMaiN2.7 - Advanced Customization Example
+ * aegnt-27 - Advanced Customization Example
  * 
- * Demonstrates advanced configuration and customization options for all HUMaiN2.7 modules
+ * Demonstrates advanced configuration and customization options for all aegnt-27 modules
  */
 
-use humain27::prelude::*;
-use humain27::config::*;
+use aegnt_27::prelude::*;
+use aegnt_27::config::*;
 use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🚀 HUMaiN2.7 Advanced Customization Example");
+    println!("🚀 aegnt-27 Advanced Customization Example");
     println!("===========================================");
     
     // Example 1: Custom Configuration
@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 async fn custom_configuration() -> Result<(), Box<dyn Error>> {
     // Create a highly customized configuration
-    let config = HumainConfig {
+    let config = AegntConfig {
         mouse: MouseConfig {
             enabled: true,
             authenticity_target: 0.98, // Ultra-high authenticity
@@ -157,8 +157,8 @@ async fn custom_configuration() -> Result<(), Box<dyn Error>> {
     // Validate the configuration
     config.validate()?;
     
-    // Initialize HUMaiN2.7 with the custom configuration
-    humain27::init_with_config(config).await?;
+    // Initialize aegnt-27 with the custom configuration
+    aegnt_27::init_with_config(config).await?;
     
     println!("   ✓ Custom configuration validated and applied");
     println!("   ✓ Ultra-high authenticity targets set");

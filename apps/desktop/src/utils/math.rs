@@ -1,5 +1,5 @@
 /*!
- * HUMaiN2.7 - Mathematical Utilities
+ * aegnt-27 - Mathematical Utilities
  * 
  * Mathematical functions for humanization algorithms and curve generation
  */

@@ -1,6 +1,6 @@
-# HUMaiN2.7 API Reference
+# aegnt-27 API Reference
 
-This directory contains comprehensive API documentation for all HUMaiN2.7 modules.
+This directory contains comprehensive API documentation for all aegnt-27 modules.
 
 ## API Documentation Structure
 
@@ -20,7 +20,7 @@ This directory contains comprehensive API documentation for all HUMaiN2.7 module
 
 ### Integration Guides
 
-- **[Quick Start](../guides/quick-start.md)** - Get started with HUMaiN2.7 in 5 minutes
+- **[Quick Start](../guides/quick-start.md)** - Get started with aegnt-27 in 5 minutes
 - **[Integration Patterns](../guides/integration-patterns.md)** - Common integration patterns and best practices
 - **[Error Handling](../guides/error-handling.md)** - Comprehensive error handling strategies
 

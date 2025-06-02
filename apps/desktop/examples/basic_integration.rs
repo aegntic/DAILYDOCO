@@ -1,18 +1,18 @@
 /*!
- * HUMaiN2.7 - Basic Integration Example
+ * aegnt-27 - Basic Integration Example
  * 
- * Demonstrates basic usage of HUMaiN2.7 for mouse and typing humanization
+ * Demonstrates basic usage of aegnt-27 for mouse and typing humanization
  */
 
-use humain27::prelude::*;
+use aegnt_27::prelude::*;
 use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // Initialize HUMaiN2.7 with default configuration
-    humain27::init().await?;
+    // Initialize aegnt-27 with default configuration
+    aegnt_27::init().await?;
     
-    println!("🧠 HUMaiN2.7 Basic Integration Example");
+    println!("🧠 aegnt-27 Basic Integration Example");
     println!("=====================================");
     
     // Example 1: Basic Mouse Movement Humanization

@@ -1,18 +1,18 @@
 /*!
- * HUMaiN2.7 - Performance Optimization Example
+ * aegnt-27 - Performance Optimization Example
  * 
  * Demonstrates performance tuning, benchmarking, and optimization techniques
  */
 
-use humain27::prelude::*;
-use humain27::config::*;
-use humain27::utils::{PerformanceTiming, get_platform_info};
+use aegnt_27::prelude::*;
+use aegnt_27::config::*;
+use aegnt_27::utils::{PerformanceTiming, get_platform_info};
 use std::error::Error;
 use std::time::{Duration, Instant};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("⚡ HUMaiN2.7 Performance Optimization Example");
+    println!("⚡ aegnt-27 Performance Optimization Example");
     println!("===========================================");
     
     // Initialize with performance monitoring

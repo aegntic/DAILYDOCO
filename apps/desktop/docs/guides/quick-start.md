@@ -1,6 +1,6 @@
-# HUMaiN2.7 Quick Start Guide
+# aegnt-27 Quick Start Guide
 
-Get up and running with HUMaiN2.7 in just 5 minutes! This guide will walk you through installation, basic setup, and your first humanization operations.
+Get up and running with aegnt-27 in just 5 minutes! This guide will walk you through installation, basic setup, and your first humanization operations.
 
 ## Prerequisites
 
@@ -15,24 +15,24 @@ Before you begin, ensure you have:
 
 ### Option 1: Add to Existing Project
 
-Add HUMaiN2.7 to your `Cargo.toml`:
+Add aegnt-27 to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-humain27 = "2.7.0"
+aegnt_27 = "2.7.0"
 
 # For full feature set
-humain27 = { version = "2.7.0", features = ["full"] }
+aegnt_27 = { version = "2.7.0", features = ["full"] }
 
 # For minimal installation
-humain27 = { version = "2.7.0", default-features = false, features = ["basic-humanization"] }
+aegnt_27 = { version = "2.7.0", default-features = false, features = ["basic-humanization"] }
 ```
 
 ### Option 2: Clone and Build from Source
 
 ```bash
-git clone https://github.com/aegntic/humain27.git
-cd humain27
+git clone https://github.com/aegntic/aegnt-27.git
+cd aegnt-27
 cargo build --release
 ```
 
@@ -42,7 +42,7 @@ Choose the features you need:
 
 ```toml
 [dependencies]
-humain27 = { 
+aegnt_27 = { 
     version = "2.7.0", 
     features = [
         "mouse-humanization",    # Mouse movement humanization
@@ -56,21 +56,21 @@ humain27 = {
 }
 ```
 
-## Your First HUMaiN2.7 Program
+## Your First aegnt-27 Program
 
 Create a new Rust project and add this simple example:
 
 ```rust
 // src/main.rs
-use humain27::prelude::*;
+use aegnt_27::prelude::*;
 use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // Initialize HUMaiN2.7
-    humain27::init().await?;
+    // Initialize aegnt-27
+    aegnt_27::init().await?;
     
-    println!("🧠 HUMaiN2.7 is ready!");
+    println!("🧠 aegnt-27 is ready!");
     
     // Create a simple mouse movement
     let result = humanize_simple_mouse_movement().await?;

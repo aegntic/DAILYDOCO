@@ -1,16 +1,16 @@
 /*!
- * HUMaiN2.7 - Multi-Platform Deployment Example
+ * aegnt-27 - Multi-Platform Deployment Example
  * 
  * Demonstrates cross-platform compatibility and deployment scenarios
  */
 
-use humain27::prelude::*;
-use humain27::utils::{get_platform_info, PlatformInfo};
+use aegnt_27::prelude::*;
+use aegnt_27::utils::{get_platform_info, PlatformInfo};
 use std::error::Error;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("🌍 HUMaiN2.7 Multi-Platform Deployment Example");
+    println!("🌍 aegnt-27 Multi-Platform Deployment Example");
     println!("=============================================");
     
     // Initialize HUMaiN2.7

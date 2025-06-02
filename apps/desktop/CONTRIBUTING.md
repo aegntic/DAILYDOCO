@@ -1,6 +1,6 @@
-# Contributing to HUMaiN2.7
+# Contributing to aegnt-27
 
-Thank you for your interest in contributing to HUMaiN2.7! This document provides guidelines and information for contributors to help maintain the quality and consistency of the project.
+Thank you for your interest in contributing to aegnt-27! This document provides guidelines and information for contributors to help maintain the quality and consistency of the project.
 
 ## Table of Contents
 
@@ -61,13 +61,13 @@ Before contributing, ensure you have:
 1. Fork the repository on GitHub
 2. Clone your fork locally:
 ```bash
-git clone https://github.com/YOUR_USERNAME/humain27.git
-cd humain27
+git clone https://github.com/YOUR_USERNAME/aegnt-27.git
+cd aegnt-27
 ```
 
 3. Add the upstream repository:
 ```bash
-git remote add upstream https://github.com/aegntic/humain27.git
+git remote add upstream https://github.com/aegntic/aegnt-27.git
 ```
 
 4. Create a new branch for your contribution:

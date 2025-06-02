@@ -1,5 +1,5 @@
 /*!
- * HUMaiN2.7 - Mouse Humanization Module
+ * aegnt-27 - Mouse Humanization Module
  * 
  * Advanced mouse movement humanization with natural patterns, micro-movements,
  * and detection resistance capabilities.

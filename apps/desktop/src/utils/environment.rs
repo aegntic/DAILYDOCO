@@ -1,11 +1,11 @@
 /*!
- * HUMaiN2.7 - Environment Validation
+ * aegnt-27 - Environment Validation
  * 
- * Platform detection and environment validation for HUMaiN2.7
+ * Platform detection and environment validation for aegnt-27
  */
 
 use serde::{Serialize, Deserialize};
-use crate::utils::{HumainError, Result};
+use crate::utils::{AegntError, Result};
 
 /// Platform information structure
 #[derive(Debug, Clone, Serialize, Deserialize)]
