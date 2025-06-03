@@ -80,6 +80,10 @@ pub mod detection;
 #[cfg_attr(docsrs, doc(cfg(feature = "persistence")))]
 pub mod persistence;
 
+#[cfg(feature = "authenticity")]
+#[cfg_attr(docsrs, doc(cfg(feature = "authenticity")))]
+pub mod authenticity;
+
 // Re-exports
 pub use crate::config::Aegnt27Config;
 pub use crate::error::{Aegnt27Error, Result};
@@ -91,7 +95,7 @@ pub use crate::mouse::{MousePath, Point, AuthenticMousePath};
 pub use crate::typing::{TypingSequence, AuthenticKeystroke};
 
 #[cfg(feature = "authenticity")]
-pub use crate::authenticity::{AuthenticityResult, ValidationResult};
+pub use crate::authenticity::{AuthenticityValidation, AuthenticityConfig};
 
 /// Prelude module for convenient imports
 pub mod prelude {
@@ -111,7 +115,7 @@ pub mod prelude {
     pub use crate::visual::{VideoFrame, GazePattern, VisualConfig};
     
     #[cfg(feature = "authenticity")]
-    pub use crate::authenticity::{AuthenticityResult, ValidationResult, AuthenticityConfig};
+    pub use crate::authenticity::{AuthenticityValidation, AuthenticityConfig, AuthenticityEngine};
 }
 
 /// The main aegnt-27 engine for achieving peak human authenticity through 27 behavioral patterns
@@ -132,7 +136,7 @@ pub struct Aegnt27Engine {
     visual_authenticator: Arc<RwLock<visual::VisualAuthenticator>>,
     
     #[cfg(feature = "authenticity")]
-    authenticity_validator: Arc<RwLock<authenticity::AuthenticityValidator>>,
+    authenticity_validator: Arc<RwLock<authenticity::AuthenticityEngine>>,
 }
 
 impl Aegnt27Engine {
@@ -170,21 +174,15 @@ impl Aegnt27Engine {
             
             #[cfg(feature = "authenticity")]
             authenticity_validator: Arc::new(RwLock::new(
-                authenticity::AuthenticityValidator::new(config.authenticity.clone()).await?
+                authenticity::AuthenticityEngine::new(authenticity::AuthenticityConfig::default())
             )),
         })
     }
     
     /// Quick authenticity validation for simple use cases
     #[cfg(feature = "authenticity")]
-    pub async fn quick_validate(content: &str, authenticity_target: f32) -> Result<AuthenticityResult> {
-        let config = Aegnt27Config::builder()
-            .authenticity(authenticity::AuthenticityConfig {
-                authenticity_target,
-                ..Default::default()
-            })
-            .build()?;
-            
+    pub async fn quick_validate(content: &str, target_score: f64) -> Result<authenticity::AuthenticityValidation> {
+        let config = Aegnt27Config::builder().build()?;
         let engine = Self::with_config(config).await?;
         engine.validate_authenticity(content).await
     }
@@ -258,20 +256,15 @@ impl Aegnt27Engine {
     }
     
     // Human authenticity validation methods
-    #[cfg(feature = "authenticity")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "authenticity")))]
-    /// Validates content for human authenticity achievement
-    pub async fn validate_authenticity(&self, content: &str) -> Result<AuthenticityResult> {
-        let mut validator = self.authenticity_validator.write().await;
-        validator.validate(content).await
-    }
     
     #[cfg(feature = "authenticity")]
     #[cfg_attr(docsrs, doc(cfg(feature = "authenticity")))]
     /// Achieves peak behavioral patterns for optimal authenticity
-    pub async fn achieve_peak_patterns(&self, target_patterns: &[authenticity::Pattern]) -> Result<Vec<authenticity::Achievement>> {
+    pub async fn validate_authenticity(&self, content: &str) -> Result<authenticity::AuthenticityValidation> {
         let mut validator = self.authenticity_validator.write().await;
-        validator.achieve_patterns(target_patterns).await
+        validator.validate_authenticity(content).await.map_err(|e| 
+            Aegnt27Error::Validation(crate::error::ValidationError::RequiredFieldMissing(e.to_string()))
+        )
     }
 }
 
@@ -388,7 +381,8 @@ impl Aegnt27EngineBuilder {
             
             #[cfg(feature = "authenticity")]
             if self.authenticity_enabled {
-                builder = builder.authenticity(authenticity::AuthenticityConfig::default());
+                // Authenticity config is handled internally
+                let _ = self.authenticity_enabled; // Use the variable to avoid warnings
             }
             
             builder.build().expect("Failed to build default config")
@@ -401,7 +395,7 @@ impl Aegnt27EngineBuilder {
 // Convenience functions for quick usage
 #[cfg(feature = "authenticity")]
 /// Quick authenticity validation function for simple use cases
-pub async fn validate_authenticity(content: &str) -> Result<AuthenticityResult> {
+pub async fn validate_authenticity(content: &str) -> Result<authenticity::AuthenticityValidation> {
     Aegnt27Engine::quick_validate(content, 0.95).await
 }
 

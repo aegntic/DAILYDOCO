@@ -128,6 +128,18 @@ target/
 # Tauri specific
 src-tauri/target/
 
+# Sensitive deployment files (keep structure but protect secrets)
+.deployment/scripts/*.env
+.deployment/configs/production.*
+.deployment/secrets/
+
+# But allow the deployment folder structure
+!.deployment/
+!.deployment/README.md
+!.deployment/scripts/
+!.deployment/docs/
+!.deployment/configs/
+
 # OS generated files
 .DS_Store
 .DS_Store?

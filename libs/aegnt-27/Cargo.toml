@@ -93,19 +93,20 @@ full = ["all-humanization", "ml-models", "video-processing", "network-features"]
 
 # Core feature sets
 basic-humanization = []
-all-humanization = ["mouse-humanization", "typing-humanization", "audio-humanization", "visual-humanization"]
-detection-validation = ["ai-detection", "pattern-analysis"]
+all-humanization = ["mouse", "typing", "audio", "visual"]
+detection-validation = ["detection", "authenticity"]
 ml-models = ["candle-core", "candle-nn", "tch"]
 video-processing = ["opencv", "ffmpeg-next"]
 network-features = ["reqwest", "hyper"]
 
 # Individual modules
-mouse-humanization = []
-typing-humanization = []
-audio-humanization = []
-visual-humanization = []
-ai-detection = []
-pattern-analysis = []
+mouse = []
+typing = []
+audio = []
+visual = []
+detection = []
+authenticity = []
+persistence = []
 
 # Benchmarks disabled for now
 # [[bench]]
