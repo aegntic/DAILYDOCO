@@ -149,7 +149,7 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
     }
   }, [isLive, videoState.isPlaying]);
 
-  const initializeAnalysis = async () => {
+  const initializeAnalysis = useCallback(async () => {
     setIsAnalyzing(true);
     
     // Initialize WebSocket for real-time updates
@@ -171,7 +171,7 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
     setTestAudience(audience);
     
     setIsAnalyzing(false);
-  };
+  }, [isLive]);
 
   const cleanup = () => {
     if (wsRef.current) {
@@ -226,7 +226,7 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
     return feedbackMap[persona] || ['Interesting content', 'Well presented', 'Good pacing'];
   };
 
-  const startMetricsCollection = () => {
+  const startMetricsCollection = useCallback(() => {
     metricsIntervalRef.current = setInterval(() => {
       const newMetric = generateRealTimeMetric();
       
@@ -240,7 +240,7 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
       analyzeCurrentSegment(newMetric);
       
     }, 1000); // Update every second
-  };
+  }, [videoState, metrics, segmentInsights, onInsightUpdate]);
 
   const stopMetricsCollection = () => {
     if (metricsIntervalRef.current) {
@@ -381,7 +381,7 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
     return suggestions;
   };
 
-  const handleRealTimeUpdate = (data: any) => {
+  const handleRealTimeUpdate = (data: { type: string; metrics?: typeof currentMetrics; segment?: SegmentInsight }) => {
     // Handle WebSocket updates from backend ML analysis
     if (data.type === 'metrics') {
       setCurrentMetrics(data.metrics);

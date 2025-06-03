@@ -119,7 +119,7 @@ interface ExportSettings {
   includeAegnt27: boolean;
   includeThumbnail: boolean;
   autoOptimize: boolean;
-  customSettings: Record<string, any>;
+  customSettings: Record<string, unknown>;
 }
 
 const ExportManager: React.FC = () => {
@@ -407,14 +407,7 @@ const ExportManager: React.FC = () => {
     return optimizations;
   };
 
-  const getJobStatusColor = (status: ExportJob['status']): string => {
-    switch (status) {
-      case 'completed': return 'text-green-600';
-      case 'processing': return 'text-blue-600';
-      case 'failed': return 'text-red-600';
-      default: return 'text-gray-600';
-    }
-  };
+  // Removed unused function getJobStatusColor
 
   const getJobStatusBadge = (status: ExportJob['status']): string => {
     switch (status) {

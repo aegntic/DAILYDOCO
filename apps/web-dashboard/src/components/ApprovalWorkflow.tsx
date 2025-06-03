@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 // Mock UI components for standalone compilation
 const Card = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
@@ -182,11 +182,7 @@ const ApprovalWorkflow: React.FC = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch('/api/projects/pending-approval');
       const data = await response.json();
@@ -197,7 +193,11 @@ const ApprovalWorkflow: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch projects:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   const handleApprove = async () => {
     if (!selectedProject) return;
