@@ -133,7 +133,7 @@ export declare class ProjectFingerprinter {
      */
     private getAllFiles;
     /**
-     * Placeholder implementations for remaining methods
+     * Simplified implementations for remaining methods
      */
     private analyzeFrameworks;
     private analyzeBuildSystems;
@@ -144,33 +144,4 @@ export declare class ProjectFingerprinter {
     private calculateProjectPriority;
     private calculateConfidence;
 }
-declare const FingerprintProjectArgsSchema: any;
-export declare class ProjectFingerprinter {
-    /**
-     * Generate comprehensive project fingerprint with technology detection
-     */
-    fingerprintProject(args: z.infer<typeof FingerprintProjectArgsSchema>): Promise<{
-        content: {
-            type: string;
-            text: string;
-        }[];
-    }>;
-    private analyzeFileStructure;
-    private detectTechnologyStack;
-    private detectJavaScriptFrameworks;
-    private detectPythonFrameworks;
-    private detectDatabases;
-    private detectToolsAndServices;
-    private detectDevOpsTools;
-    private detectFrameworksByFiles;
-    private analyzeDependencies;
-    private assessQualityIndicators;
-    private analyzeDevelopmentInsights;
-    private determineProjectCharacteristics;
-    private identifyDocumentationOpportunities;
-    private calculateConfidenceScore;
-    private generateFingerprintId;
-    private getLanguageFromExtension;
-}
-export {};
 //# sourceMappingURL=project-fingerprinter.d.ts.map

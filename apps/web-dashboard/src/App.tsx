@@ -1,5 +1,10 @@
 // React import removed for TypeScript compilation
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import StatusDashboard from './components/StatusDashboard';
+import ApprovalWorkflow from './components/ApprovalWorkflow';
+import RealTimePreview from './components/RealTimePreview';
+import ExportManager from './components/ExportManager';
 import { 
   PlayIcon, 
   SparklesIcon, 
@@ -44,10 +49,65 @@ const stats = [
 ];
 
 function App() {
+  const [currentView, setCurrentView] = useState<'landing' | 'dashboard' | 'approval' | 'preview' | 'export'>('landing');
+
+  // Navigation component
+  const Navigation = () => (
+    <div className="flex space-x-4">
+      <button 
+        onClick={() => setCurrentView('landing')}
+        className={`px-4 py-2 rounded ${currentView === 'landing' ? 'bg-primary-500 text-white' : 'text-gray-300 hover:text-white'}`}
+      >
+        Home
+      </button>
+      <button 
+        onClick={() => setCurrentView('dashboard')}
+        className={`px-4 py-2 rounded ${currentView === 'dashboard' ? 'bg-primary-500 text-white' : 'text-gray-300 hover:text-white'}`}
+      >
+        📊 Status Dashboard
+      </button>
+      <button 
+        onClick={() => setCurrentView('preview')}
+        className={`px-4 py-2 rounded ${currentView === 'preview' ? 'bg-primary-500 text-white' : 'text-gray-300 hover:text-white'}`}
+      >
+        🎬 Live Preview
+      </button>
+      <button 
+        onClick={() => setCurrentView('approval')}
+        className={`px-4 py-2 rounded ${currentView === 'approval' ? 'bg-primary-500 text-white' : 'text-gray-300 hover:text-white'}`}
+      >
+        ✅ Approval
+      </button>
+      <button 
+        onClick={() => setCurrentView('export')}
+        className={`px-4 py-2 rounded ${currentView === 'export' ? 'bg-primary-500 text-white' : 'text-gray-300 hover:text-white'}`}
+      >
+        📦 Export
+      </button>
+    </div>
+  );
+
+  // Render different views based on current selection
+  if (currentView === 'dashboard') {
+    return <StatusDashboard />;
+  }
+  
+  if (currentView === 'approval') {
+    return <ApprovalWorkflow />;
+  }
+  
+  if (currentView === 'preview') {
+    return <RealTimePreview />;
+  }
+  
+  if (currentView === 'export') {
+    return <ExportManager />;
+  }
+
   return (
     <div className="relative overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 bg-400% animate-gradient" />
+      <div className="absolute inset-0 bg-gray-900" />
       <div className="absolute inset-0 bg-black/20" />
       
       {/* Floating Orbs */}
@@ -72,11 +132,9 @@ function App() {
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="hidden md:flex items-center space-x-8"
+              className="flex items-center space-x-8"
             >
-              <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
-              <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
-              <a href="#docs" className="text-gray-300 hover:text-white transition-colors">Docs</a>
+              <Navigation />
               <button className="btn-primary">Start Free Trial</button>
             </motion.div>
           </nav>

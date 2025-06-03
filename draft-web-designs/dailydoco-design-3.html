@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DailyDoco Pro - Neural Documentation Collective</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Cyberpunk Neural Palette */
+            --void-black: #000000;
+            --neural-dark: #0A0015;
+            --synapse-purple: #7B2CBF;
+            --memory-cyan: #00F5FF;
+            --consciousness-pink: #FF0080;
+            --data-green: #00FF88;
+            --glitch-red: #FF0040;
+            --ghost-white: #E0E0FF;
+            
+            /* Neon Gradients */
+            --gradient-neural: linear-gradient(45deg, #7B2CBF, #00F5FF, #FF0080);
+            --gradient-memory: radial-gradient(circle at center, #00F5FF 0%, transparent 70%);
+            --gradient-glitch: linear-gradient(90deg, #FF0040, #FF0080, #7B2CBF);
+            
+            /* Typography */
+            --font-neural: 'Orbitron', monospace;
+            --font-code: 'Share Tech Mono', monospace;
+            --font-interface: 'Exo 2', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-interface);
+            background: var(--void-black);
+            color: var(--ghost-white);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        /* Neural Network Background */
+        #neural-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+        
+        /* Glitch Effect */
+        @keyframes glitch {
+            0%, 100% { 
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+            20% { 
+                transform: translate(-2px, 2px);
+                filter: hue-rotate(90deg);
+            }
+            40% { 
+                transform: translate(-2px, -2px);
+                filter: hue-rotate(180deg);
+            }
+            60% { 
+                transform: translate(2px, 2px);
+                filter: hue-rotate(270deg);
+            }
+            80% { 
+                transform: translate(2px, -2px);
+                filter: hue-rotate(360deg);
+            }
+        }
+        
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+        
+        /* Scan Lines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 245, 255, 0.03) 2px,
+                rgba(0, 245, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        /* Neural Interface Header */
+        .neural-interface {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(10, 0, 21, 0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--synapse-purple);
+        }
+        
+        .interface-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            height: 100%;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 2rem;
+        }
+        
+        .neural-id {
+            font-family: var(--font-neural);
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: var(--memory-cyan);
+            text-shadow: 0 0 20px var(--memory-cyan);
+        }
+        
+        .consciousness-meter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .meter-label {
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+        
+        .meter-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid var(--synapse-purple);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background: var(--gradient-neural);
+            width: 75%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        .sync-status {
+            text-align: right;
+            font-family: var(--font-code);
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--data-green);
+            color: var(--data-green);
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--data-green);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        /* Memory Upload Hero */
+        .memory-upload {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 120px;
+            z-index: 10;
+        }
+        
+        .upload-portal {
+            width: 90%;
+            max-width: 1200px;
+            padding: 4rem;
+            background: rgba(10, 0, 21, 0.8);
+            border: 2px solid var(--synapse-purple);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-portal::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: var(--gradient-neural);
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(10px);
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .portal-content h1 {
+            font-family: var(--font-neural);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .portal-content h1 span {
+            display: block;
+            background: var(--gradient-neural);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--memory-cyan));
+        }
+        
+        .neural-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--memory-cyan);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-code);
+            position: relative;
+        }
+        
+        .input-label {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--neural-dark);
+            padding: 0 10px;
+            font-size: 0.875rem;
+            color: var(--memory-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .code-memory {
+            color: var(--data-green);
+            line-height: 1.6;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .consciousness-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .neural-button {
+            padding: 1rem 3rem;
+            background: transparent;
+            border: 2px solid var(--consciousness-pink);
+            color: var(--consciousness-pink);
+            font-family: var(--font-neural);
+            font-size: 1.125rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .neural-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--consciousness-pink);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s;
+        }
+        
+        .neural-button:hover {
+            color: var(--void-black);
+            text-shadow: 0 0 20px var(--consciousness-pink);
+            box-shadow: 0 0 30px var(--consciousness-pink);
+        }
+        
+        .neural-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .neural-button span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Memory Banks Grid */
+        .memory-banks {
+            padding: 5rem 2rem;
+            background: var(--neural-dark);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-family: var(--font-neural);
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            background: var(--gradient-neural);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .memory-cell {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--synapse-purple);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .memory-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-neural);
+            transition: left 0.5s;
+        }
+        
+        .memory-cell:hover {
+            border-color: var(--memory-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.3);
+        }
+        
+        .memory-cell:hover::before {
+            left: 0;
+        }
+        
+        .cell-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .cell-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .cell-id {
+            font-family: var(--font-code);
+            font-size: 0.875rem;
+            color: var(--synapse-purple);
+        }
+        
+        .cell-title {
+            font-family: var(--font-neural);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--memory-cyan);
+            margin-bottom: 0.5rem;
+        }
+        
+        .cell-data {
+            color: var(--ghost-white);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        /* Synaptic Connections Visualization */
+        .synaptic-viz {
+            padding: 5rem 2rem;
+            background: var(--void-black);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .synapse-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 600px;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(123, 44, 191, 0.1) 0%, transparent 70%);
+        }
+        
+        .synapse-node {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(0, 245, 255, 0.1);
+            border: 2px solid var(--memory-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-code);
+            font-size: 0.875rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .synapse-node:hover {
+            background: rgba(0, 245, 255, 0.3);
+            transform: scale(1.2);
+            box-shadow: 0 0 40px var(--memory-cyan);
+        }
+        
+        .node-1 { top: 10%; left: 20%; }
+        .node-2 { top: 20%; right: 25%; }
+        .node-3 { bottom: 30%; left: 15%; }
+        .node-4 { bottom: 20%; right: 20%; }
+        .node-5 { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        
+        .synapse-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--synapse-purple), transparent);
+            transform-origin: left center;
+            animation: dataFlow 3s linear infinite;
+        }
+        
+        @keyframes dataFlow {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* Consciousness Terminal */
+        .consciousness-terminal {
+            padding: 5rem 2rem;
+            background: var(--neural-dark);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .terminal {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--data-green);
+            padding: 2rem;
+            font-family: var(--font-code);
+            font-size: 0.875rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: 'NEURAL_TERMINAL_v27.0.1';
+            position: absolute;
+            top: -1px;
+            left: 20px;
+            background: var(--neural-dark);
+            padding: 0 10px;
+            color: var(--data-green);
+            font-size: 0.75rem;
+        }
+        
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+        
+        @keyframes typeIn {
+            to { opacity: 1; }
+        }
+        
+        .terminal-prompt {
+            color: var(--data-green);
+        }
+        
+        .terminal-command {
+            color: var(--memory-cyan);
+        }
+        
+        .terminal-output {
+            color: var(--ghost-white);
+            opacity: 0.8;
+        }
+        
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--data-green);
+            animation: cursorBlink 1s infinite;
+        }
+        
+        @keyframes cursorBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        /* Collective Stats */
+        .collective-stats {
+            padding: 5rem 2rem;
+            background: var(--void-black);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-module {
+            background: rgba(123, 44, 191, 0.1);
+            border: 1px solid var(--synapse-purple);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-value {
+            font-family: var(--font-neural);
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-neural);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-family: var(--font-code);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ghost-white);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Canvas -->
+    <canvas id="neural-canvas"></canvas>
+    
+    <!-- Neural Interface Header -->
+    <header class="neural-interface">
+        <div class="interface-grid">
+            <div class="neural-id">NEURAL_ID://DD-27-∞</div>
+            
+            <div class="consciousness-meter">
+                <span class="meter-label">Consciousness Level</span>
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
+                </div>
+            </div>
+            
+            <div class="sync-status">
+                <span class="status-indicator">
+                    <span class="status-dot"></span>
+                    SYNCED TO COLLECTIVE
+                </span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Memory Upload Portal -->
+    <section class="memory-upload">
+        <div class="upload-portal">
+            <div class="portal-content">
+                <h1>
+                    Upload Your Consciousness
+                    <span>Document Through Neural Link</span>
+                </h1>
+                
+                <div class="neural-input">
+                    <span class="input-label">// MEMORY_STREAM</span>
+                    <pre class="code-memory">
+const consciousness = await NeuralCollective.connect({
+    developer: currentUser,
+    project: activeWorkflow,
+    memories: capturedMoments,
+    authenticity: aegnt27.peak()
+});
+
+consciousness.upload({
+    thoughts: codeEvolution,
+    emotions: debuggingFrustration,
+    breakthroughs: solutionEuphoria
+});</pre>
+                </div>
+                
+                <div class="consciousness-buttons">
+                    <button class="neural-button">
+                        <span>INITIATE UPLOAD</span>
+                    </button>
+                    <button class="neural-button">
+                        <span>JOIN COLLECTIVE</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Memory Banks -->
+    <section class="memory-banks">
+        <div class="section-header">
+            <h2>Memory Banks</h2>
+            <p style="color: var(--synapse-purple); font-family: var(--font-code);">
+                // Stored consciousness fragments from the collective
+            </p>
+        </div>
+        
+        <div class="memory-grid">
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">🧠</span>
+                    <span class="cell-id">#MEM_7B2C</span>
+                </div>
+                <h3 class="cell-title">Predictive Neural Capture</h3>
+                <p class="cell-data">
+                    Our collective consciousness anticipates significant code moments 30 seconds before manifestation, storing them in perpetual memory crystals.
+                </p>
+            </div>
+            
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">👁️</span>
+                    <span class="cell-id">#MEM_00F5</span>
+                </div>
+                <h3 class="cell-title">Synthetic Consciousness Test</h3>
+                <p class="cell-data">
+                    100 artificial minds experience your documentation before release, ensuring maximum neural resonance with organic viewers.
+                </p>
+            </div>
+            
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">🔮</span>
+                    <span class="cell-id">#MEM_FF00</span>
+                </div>
+                <h3 class="cell-title">aegnt-27 Peak Protocol</h3>
+                <p class="cell-data">
+                    Channel the creative consciousness of the 27 Club, achieving peak human authenticity through 27 layers of neural transformation.
+                </p>
+            </div>
+            
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">⚡</span>
+                    <span class="cell-id">#MEM_00FF</span>
+                </div>
+                <h3 class="cell-title">Quantum Processing</h3>
+                <p class="cell-data">
+                    Sub-2x realtime consciousness processing through quantum entanglement of Rust and TypeScript neural pathways.
+                </p>
+            </div>
+            
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">🌐</span>
+                    <span class="cell-id">#MEM_7BFF</span>
+                </div>
+                <h3 class="cell-title">Distributed Consciousness</h3>
+                <p class="cell-data">
+                    Your memories remain in your local neural vault while optionally syncing with the greater collective consciousness.
+                </p>
+            </div>
+            
+            <div class="memory-cell">
+                <div class="cell-header">
+                    <span class="cell-icon">🎭</span>
+                    <span class="cell-id">#MEM_FF80</span>
+                </div>
+                <h3 class="cell-title">Human Ghost Protocol</h3>
+                <p class="cell-data">
+                    98% resistance to AI consciousness detection through authentic neural pattern injection and behavioral fingerprinting.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Synaptic Connections -->
+    <section class="synaptic-viz">
+        <div class="section-header">
+            <h2>Synaptic Network</h2>
+        </div>
+        
+        <div class="synapse-container">
+            <div class="synapse-node node-1">Code<br>Capture</div>
+            <div class="synapse-node node-2">Neural<br>Analysis</div>
+            <div class="synapse-node node-3">Memory<br>Formation</div>
+            <div class="synapse-node node-4">Consciousness<br>Upload</div>
+            <div class="synapse-node node-5">Collective<br>Mind</div>
+            
+            <!-- Dynamic connections will be drawn by JS -->
+        </div>
+    </section>
+    
+    <!-- Consciousness Terminal -->
+    <section class="consciousness-terminal">
+        <div class="terminal">
+            <div class="terminal-line" style="animation-delay: 0.5s">
+                <span class="terminal-prompt">neural@collective:~$</span>
+                <span class="terminal-command"> consciousness.initialize()</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 1s">
+                <span class="terminal-output">✓ Neural pathways established</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 1.5s">
+                <span class="terminal-output">✓ Memory banks online</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 2s">
+                <span class="terminal-output">✓ aegnt-27 consciousness loaded</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 2.5s">
+                <span class="terminal-prompt">neural@collective:~$</span>
+                <span class="terminal-command"> mind.merge(developer.consciousness)</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 3s">
+                <span class="terminal-output">◉ Uploading memories... 97% complete</span>
+            </div>
+            <div class="terminal-line" style="animation-delay: 3.5s">
+                <span class="terminal-cursor"></span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Collective Stats -->
+    <section class="collective-stats">
+        <div class="stats-grid">
+            <div class="stat-module">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Memories Stored</div>
+            </div>
+            <div class="stat-module">
+                <div class="stat-value">27ms</div>
+                <div class="stat-label">Neural Latency</div>
+            </div>
+            <div class="stat-module">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Human Ghost Score</div>
+            </div>
+            <div class="stat-module">
+                <div class="stat-value">∑∞</div>
+                <div class="stat-label">Collective Minds</div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Neural Network Background Animation
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        class Neuron {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 3 + 1;
+                this.connections = [];
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#00F5FF';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#00F5FF';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        const neurons = [];
+        for (let i = 0; i < 50; i++) {
+            neurons.push(new Neuron(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height
+            ));
+        }
+        
+        function drawConnections() {
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    const dx = neurons[i].x - neurons[j].x;
+                    const dy = neurons[i].y - neurons[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(neurons[i].x, neurons[i].y);
+                        ctx.lineTo(neurons[j].x, neurons[j].y);
+                        ctx.strokeStyle = `rgba(123, 44, 191, ${1 - distance / 150})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            neurons.forEach(neuron => {
+                neuron.update();
+                neuron.draw();
+            });
+            
+            drawConnections();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Glitch effect on hover
+        document.querySelectorAll('.memory-cell, .synapse-node').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.classList.add('glitch');
+                setTimeout(() => this.classList.remove('glitch'), 300);
+            });
+        });
+        
+        // Draw synaptic connections
+        function drawSynapticConnections() {
+            const container = document.querySelector('.synapse-container');
+            const nodes = container.querySelectorAll('.synapse-node');
+            
+            // Create connections between nodes
+            const connections = [
+                [0, 1], [1, 2], [2, 3], [3, 4],
+                [0, 4], [1, 4], [2, 4], [3, 0]
+            ];
+            
+            connections.forEach(([from, to]) => {
+                const fromNode = nodes[from];
+                const toNode = nodes[to];
+                
+                const line = document.createElement('div');
+                line.className = 'synapse-connection';
+                
+                const fromRect = fromNode.getBoundingClientRect();
+                const toRect = toNode.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                
+                const x1 = fromRect.left + fromRect.width / 2 - containerRect.left;
+                const y1 = fromRect.top + fromRect.height / 2 - containerRect.top;
+                const x2 = toRect.left + toRect.width / 2 - containerRect.left;
+                const y2 = toRect.top + toRect.height / 2 - containerRect.top;
+                
+                const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}px`;
+                line.style.top = `${y1}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                
+                container.appendChild(line);
+            });
+        }
+        
+        drawSynapticConnections();
+        
+        // Consciousness meter animation
+        const meterFill = document.querySelector('.meter-fill');
+        let meterValue = 75;
+        
+        setInterval(() => {
+            meterValue = 70 + Math.random() * 30;
+            meterFill.style.width = `${meterValue}%`;
+        }, 2000);
+        
+        // Neural button effects
+        document.querySelectorAll('.neural-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = 'glitch 0.5s';
+                }, 10);
+            });
+        });
+    </script>
+</body>
+</html>

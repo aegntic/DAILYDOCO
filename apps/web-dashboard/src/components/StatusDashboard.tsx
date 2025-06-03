@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-// Mock UI components for standalone compilation
+// Mock UI components for standalone compilation with dark theme
 const Card = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
-  <div className={`bg-white rounded-lg shadow ${className}`}>{children}</div>
+  <div className={`glass-card ${className}`}>{children}</div>
 );
 const CardHeader = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
-  <div className={`p-4 border-b ${className}`}>{children}</div>
+  <div className={`p-4 border-b border-white/20 ${className}`}>{children}</div>
 );
 const CardTitle = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
-  <h3 className={`text-lg font-semibold ${className}`}>{children}</h3>
+  <h3 className={`text-lg font-semibold text-white ${className}`}>{children}</h3>
 );
 const CardContent = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
-  <div className={`p-4 ${className}`}>{children}</div>
+  <div className={`p-4 text-white ${className}`}>{children}</div>
 );
 const Badge = ({ children, variant = 'default' }: { children: React.ReactNode, variant?: string }) => (
   <span className={`px-2 py-1 text-xs rounded ${variant === 'destructive' ? 'bg-red-100 text-red-800' : variant === 'secondary' ? 'bg-gray-100 text-gray-800' : 'bg-blue-100 text-blue-800'}`}>
@@ -56,25 +56,61 @@ const StatusDashboard: React.FC = () => {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
+    let ws: WebSocket | null = null;
+    
+    // Initial data fetch
+    const fetchInitialData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/metrics');
+        const data = await response.json();
+        setMetrics(data);
+      } catch (error) {
+        console.error('Failed to fetch initial metrics:', error);
+      }
+    };
+
     // WebSocket connection for real-time updates
-    const ws = new WebSocket('ws://localhost:8080/status');
-    
-    ws.onopen = () => {
-      setConnected(true);
-      console.log('Connected to DailyDoco status stream');
+    const connectWebSocket = () => {
+      try {
+        ws = new WebSocket('ws://localhost:8080');
+        
+        ws.onopen = () => {
+          setConnected(true);
+          console.log('Connected to DailyDoco status stream');
+        };
+        
+        ws.onmessage = (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            if (message.type === 'metrics') {
+              setMetrics(message.data);
+            }
+          } catch (error) {
+            console.error('Failed to parse WebSocket message:', error);
+          }
+        };
+        
+        ws.onclose = () => {
+          setConnected(false);
+          console.log('Disconnected from status stream');
+        };
+        
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+      } catch (error) {
+        console.error('Failed to connect to WebSocket:', error);
+      }
     };
-    
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMetrics(data);
+
+    fetchInitialData();
+    connectWebSocket();
+
+    return () => {
+      if (ws) {
+        ws.close();
+      }
     };
-    
-    ws.onclose = () => {
-      setConnected(false);
-      console.log('Disconnected from status stream');
-    };
-    
-    return () => ws.close();
   }, []);
 
   const getStatusColor = (isActive: boolean) => {
