@@ -10,8 +10,8 @@ const Card = ({ children, className = '' }: { children: React.ReactNode, classNa
 const CardHeader = ({ children }: { children: React.ReactNode }) => (
   <div className="p-4 border-b">{children}</div>
 );
-const CardTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-lg font-semibold">{children}</h3>
+const CardTitle = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+  <h3 className={`text-lg font-semibold ${className}`}>{children}</h3>
 );
 const CardContent = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
   <div className={`p-4 ${className}`}>{children}</div>
@@ -383,10 +383,10 @@ const RealTimePreview: React.FC<RealTimePreviewProps> = ({
 
   const handleRealTimeUpdate = (data: { type: string; metrics?: typeof currentMetrics; segment?: SegmentInsight }) => {
     // Handle WebSocket updates from backend ML analysis
-    if (data.type === 'metrics') {
+    if (data.type === 'metrics' && data.metrics) {
       setCurrentMetrics(data.metrics);
-    } else if (data.type === 'segment_analysis') {
-      setSegmentInsights(prev => [...prev, data.segment]);
+    } else if (data.type === 'segment_analysis' && data.segment) {
+      setSegmentInsights(prev => [...prev, data.segment as SegmentInsight]);
     }
   };
 

@@ -1,124 +1,127 @@
 {
   "mcpServers": {
     "filesystem": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-filesystem", "/home/tabs"],
-      "disabled": false
+      "command": "bunx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/tabs"]
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git"],
-      "disabled": false
+      "args": ["mcp-server-git"]
     },
-    "memory": {
-      "command": "/usr/local/bin/mcp-server-memory",
-      "args": [],
-      "disabled": false
+    "docker": {
+      "command": "uvx",
+      "args": ["mcp-server-docker"]
     },
-    "sequentialthinking": {
-      "command": "/usr/local/bin/mcp-server-sequential-thinking",
-      "args": [],
-      "disabled": false
+    "aegntic-knowledge-engine": {
+      "command": "uv",
+      "args": ["run", "--project", "/home/tabs/mcp-servers/aegntic-knowledge-engine", "python", "src/crawl4ai_mcp.py"],
+      "env": {
+        "DISPLAY": ":0",
+        "HOST": "0.0.0.0",
+        "PORT": "8052",
+        "TRANSPORT": "stdio",
+        "VECTOR_DB_DIR": "/home/tabs/Google Drive/aegntic_knowledge",
+        "OPENROUTER_API_KEY": "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"
+      }
+    },
+    "quick-data": {
+      "command": "/home/tabs/.local/bin/uv",
+      "args": [
+        "--directory",
+        "/home/tabs/DAILYDOCO/quick-data-mcp/quick-data-mcp",
+        "run",
+        "python",
+        "main.py"
+      ],
+      "env": {
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "fetch": {
+      "command": "/usr/local/bin/mcp-fetch",
+      "args": []
     },
     "puppeteer": {
       "command": "/usr/local/bin/mcp-server-puppeteer",
       "args": [],
-      "disabled": false
-    },
-    "fetch": {
-      "command": "/usr/local/bin/mcp-fetch",
-      "args": [],
-      "disabled": false
-    },
-    "time": {
-      "command": "uvx",
-      "args": ["mcp-server-time"],
-      "disabled": false
-    },
-    "docker": {
-      "command": "uvx",
-      "args": ["mcp-server-docker"],
-      "disabled": false
-    },
-    "crawl4ai": {
-      "command": "uvx",
-      "args": ["crawl4ai-mcp-server"],
-      "disabled": false
-    },
-    "sandbox": {
-      "command": "uvx",
-      "args": ["mcp-server-shell @ git+https://github.com/emsi/mcp-server-shell"],
-      "disabled": false
-    },
-    "context7": {
-      "command": "npx",
-      "args": ["@upstash/context7-mcp@latest"],
-      "disabled": false
-    },
-    "brave-search": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-brave-search"],
-      "disabled": false
+      "env": {
+        "DISPLAY": ":0"
+      }
     },
     "github": {
+      "command": "bunx",
+      "args": [
+        "@smithery/cli@latest",
+        "run",
+        "@smithery-ai/github",
+        "--key",
+        "deacc7db-6b36-48f1-88c7-2aca6e39177f"
+      ]
+    },
+    "exa": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-github"],
-      "disabled": false
-    },
-    "notion": {
-      "command": "npx",
-      "args": ["@notionhq/notion-mcp-server"],
-      "disabled": false
-    },
-    "n8n": {
-      "command": "npx",
-      "args": ["@nazcamedia/n8n-mcp-server"],
-      "disabled": false
-    },
-    "postman": {
-      "command": "uvx",
-      "args": ["postman-mcp-server"],
-      "disabled": false
-    },
-    "mcp-framework": {
-      "command": "npx",
-      "args": ["mcp-framework"],
-      "disabled": false
-    },
-    "youtube": {
-      "command": "npx",
-      "args": ["youtube-data-mcp-server"],
-      "disabled": false
-    },
-    "desktop-commander": {
-      "command": "npx",
-      "args": ["@smithery/cli", "run", "@wonderwhy-er/desktop-commander"],
-      "disabled": false
-    },
-    "postgresql": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-postgres"],
-      "disabled": false
-    },
-    "web-search": {
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-tavily"],
-      "disabled": false
-    },
-    "prompts": {
-      "command": "uvx",
-      "args": ["mcp-server-prompts"],
-      "disabled": false
-    },
-    "taskmaster": {
-      "command": "uvx",
-      "args": ["mcp-server-taskmaster"],
-      "disabled": false
+      "args": ["exa-mcp-server"]
     },
     "smithery": {
       "command": "npx",
-      "args": ["@smithery/cli", "run", "@smithery/toolbox"],
-      "disabled": false
+      "args": [
+        "@smithery/cli", 
+        "run",
+        "@smithery/toolbox"
+      ]
+    },
+    "desktop-commander": {
+      "command": "bunx",
+      "args": [
+        "@smithery/cli@latest",
+        "run", 
+        "@wonderwhy-er/desktop-commander",
+        "--key",
+        "deacc7db-6b36-48f1-88c7-2aca6e39177f"
+      ]
+    },
+    "sequentialthinking": {
+      "command": "/usr/local/bin/mcp-server-sequential-thinking",
+      "args": []
+    },
+    "just-prompt": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/home/tabs/mcp-servers/just-prompt",
+        "run",
+        "just-prompt",
+        "--default-models",
+        "anthropic:claude-4-sonnet"
+      ],
+      "env": {}
+    },
+    "ppick": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/home/tabs/mcp-servers/pickd",
+        "run",
+        "mcp-server-pickd",
+        "--database",
+        "./database.db"
+      ]
+    },
+    "memory": {
+      "command": "/usr/local/bin/mcp-server-memory",
+      "args": []
+    },
+    "time": {
+      "command": "uvx",
+      "args": ["mcp-server-time"]
+    },
+    "crawl4ai": {
+      "command": "uvx",
+      "args": ["crawl4ai-mcp"]
+    },
+    "sandbox": {
+      "command": "uvx",
+      "args": ["mcp-server-shell", "@", "git+https://github.com/emsi/mcp-server-shell"]
     }
   }
 }
