@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/cover-16x9.jpg" alt="DAILYDOCO — Automated AI Documentation & Developer Capture" width="100%" />
+</p>
+
 # DailyDoco Pro 🎬
 
 **Elite-tier automated documentation platform that transforms developer workflows into professional video documentation**
