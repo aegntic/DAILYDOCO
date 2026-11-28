@@ -12,33 +12,28 @@
 //! - **Human Authenticity Validation**: Peak human achievement validation
 //! 
 //! ## Quick Start
-//! 
-//! ```rust
+//!
+//! ```ignore
+//! // Requires the `mouse` and `typing` features (--features mouse,typing).
 //! use aegnt27::prelude::*;
-//! 
+//! use std::time::Duration;
+//!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Aegnt27Error> {
-//!     let aegnt = Aegnt27Engine::builder()
-//!         .enable_mouse_authenticity()
-//!         .enable_typing_authenticity()
-//!         .enable_authenticity_validation()
-//!         .build()
-//!         .await?;
-//!     
-//!     // Achieve mouse authenticity
-//!     let mouse_path = MousePath::linear(Point::new(0, 0), Point::new(500, 300));
-//!     let authentic_path = aegnt.achieve_mouse_authenticity(mouse_path).await?;
-//!     
-//!     // Achieve typing authenticity
-//!     let text = "Hello, world! This achieves peak human authenticity.";
-//!     let typing_sequence = aegnt.achieve_typing_authenticity(text).await?;
-//!     
-//!     // Validate authenticity achievement
-//!     let content = "This content achieves peak human authenticity...";
-//!     let validation = aegnt.validate_authenticity(content).await?;
-//!     
-//!     println!("Human authenticity: {:.1}%", validation.authenticity_score * 100.0);
-//!     
+//!     // Humanize a mouse path
+//!     let mut mouse = MouseHumanizer::new(MouseConfig::default()).await?;
+//!     let path = MousePath::from_points(
+//!         vec![Point::new(0, 0), Point::new(250, 150), Point::new(500, 300)],
+//!         Duration::from_millis(300),
+//!     )?;
+//!     let humanized = mouse.humanize_path(path).await?;
+//!     println!("mouse steps: {}", humanized.step_count());
+//!
+//!     // Humanize typing
+//!     let mut typer = TypingHumanizer::new(TypingConfig::default()).await?;
+//!     let seq = typer.humanize_text("Hello, world!").await?;
+//!     println!("typing authenticity: {:.2}", seq.authenticity_score);
+//!
 //!     Ok(())
 //! }
 //! ```
@@ -89,10 +84,10 @@ pub use crate::config::Aegnt27Config;
 pub use crate::error::{Aegnt27Error, Result};
 
 #[cfg(feature = "mouse")]
-pub use crate::mouse::{MousePath, Point, AuthenticMousePath};
+pub use crate::mouse::{MousePath, Point};
 
 #[cfg(feature = "typing")]
-pub use crate::typing::{TypingSequence, AuthenticKeystroke};
+pub use crate::typing::TypingSequence;
 
 #[cfg(feature = "authenticity")]
 pub use crate::authenticity::{AuthenticityValidation, AuthenticityConfig};
@@ -103,10 +98,10 @@ pub mod prelude {
     pub use crate::config::Aegnt27Config;
     
     #[cfg(feature = "mouse")]
-    pub use crate::mouse::{MousePath, Point, AuthenticMousePath, MouseConfig};
-    
+    pub use crate::mouse::{MousePath, Point, MouseConfig};
+
     #[cfg(feature = "typing")]
-    pub use crate::typing::{TypingSequence, AuthenticKeystroke, TypingConfig};
+    pub use crate::typing::{TypingSequence, TypingConfig};
     
     #[cfg(feature = "audio")]
     pub use crate::audio::{AudioData, AuthenticAudio, AudioConfig};
@@ -122,19 +117,7 @@ pub mod prelude {
 #[derive(Debug)]
 pub struct Aegnt27Engine {
     config: Arc<Aegnt27Config>,
-    
-    #[cfg(feature = "mouse")]
-    mouse_authenticator: Arc<RwLock<mouse::MouseAuthenticator>>,
-    
-    #[cfg(feature = "typing")]
-    typing_authenticator: Arc<RwLock<typing::TypingAuthenticator>>,
-    
-    #[cfg(feature = "audio")]
-    audio_authenticator: Arc<RwLock<audio::AudioAuthenticator>>,
-    
-    #[cfg(feature = "visual")]
-    visual_authenticator: Arc<RwLock<visual::VisualAuthenticator>>,
-    
+
     #[cfg(feature = "authenticity")]
     authenticity_validator: Arc<RwLock<authenticity::AuthenticityEngine>>,
 }
@@ -151,27 +134,7 @@ impl Aegnt27Engine {
         
         Ok(Self {
             config: config.clone(),
-            
-            #[cfg(feature = "mouse")]
-            mouse_authenticator: Arc::new(RwLock::new(
-                mouse::MouseAuthenticator::new(config.mouse.clone()).await?
-            )),
-            
-            #[cfg(feature = "typing")]
-            typing_authenticator: Arc::new(RwLock::new(
-                typing::TypingAuthenticator::new(config.typing.clone()).await?
-            )),
-            
-            #[cfg(feature = "audio")]
-            audio_authenticator: Arc::new(RwLock::new(
-                audio::AudioAuthenticator::new(config.audio.clone()).await?
-            )),
-            
-            #[cfg(feature = "visual")]
-            visual_authenticator: Arc::new(RwLock::new(
-                visual::VisualAuthenticator::new(config.visual.clone()).await?
-            )),
-            
+
             #[cfg(feature = "authenticity")]
             authenticity_validator: Arc::new(RwLock::new(
                 authenticity::AuthenticityEngine::new(authenticity::AuthenticityConfig::default())
@@ -186,75 +149,7 @@ impl Aegnt27Engine {
         let engine = Self::with_config(config).await?;
         engine.validate_authenticity(content).await
     }
-    
-    // Mouse authenticity achievement methods
-    #[cfg(feature = "mouse")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "mouse")))]
-    /// Achieves mouse authenticity along the given path
-    pub async fn achieve_mouse_authenticity(&self, path: MousePath) -> Result<AuthenticMousePath> {
-        let mut authenticator = self.mouse_authenticator.write().await;
-        authenticator.achieve_authenticity(path).await
-    }
-    
-    #[cfg(feature = "mouse")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "mouse")))]
-    /// Generates a peak authentic mouse path between two points
-    pub async fn generate_peak_mouse_path(&self, start: Point, end: Point) -> Result<MousePath> {
-        let mut authenticator = self.mouse_authenticator.write().await;
-        authenticator.generate_peak_path(start, end).await
-    }
-    
-    // Typing authenticity achievement methods
-    #[cfg(feature = "typing")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "typing")))]
-    /// Achieves typing authenticity for the given text
-    pub async fn achieve_typing_authenticity(&self, text: &str) -> Result<TypingSequence> {
-        let mut authenticator = self.typing_authenticator.write().await;
-        authenticator.achieve_authenticity(text).await
-    }
-    
-    #[cfg(feature = "typing")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "typing")))]
-    /// Applies natural typing variations in the text
-    pub async fn apply_natural_variations(&self, text: &str, variation_rate: f32) -> Result<String> {
-        let mut authenticator = self.typing_authenticator.write().await;
-        authenticator.apply_variations(text, variation_rate.into()).await
-    }
-    
-    // Audio authenticity achievement methods
-    #[cfg(feature = "audio")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "audio")))]
-    /// Achieves audio authenticity with natural characteristics
-    pub async fn achieve_audio_authenticity(&self, audio: audio::AudioData) -> Result<audio::AuthenticAudio> {
-        let mut authenticator = self.audio_authenticator.write().await;
-        authenticator.achieve_authenticity(audio).await
-    }
-    
-    #[cfg(feature = "audio")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "audio")))]
-    /// Applies natural voice patterns to audio
-    pub async fn apply_natural_voice_patterns(&self, audio: audio::AudioData) -> Result<audio::AudioData> {
-        let mut authenticator = self.audio_authenticator.write().await;
-        authenticator.apply_voice_patterns(audio).await
-    }
-    
-    // Visual authenticity achievement methods
-    #[cfg(feature = "visual")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "visual")))]
-    /// Achieves visual authenticity of video frames
-    pub async fn achieve_visual_authenticity(&self, frames: &[visual::VideoFrame]) -> Result<Vec<visual::VideoFrame>> {
-        let mut authenticator = self.visual_authenticator.write().await;
-        authenticator.achieve_authenticity(frames).await
-    }
-    
-    #[cfg(feature = "visual")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "visual")))]
-    /// Generates natural gaze patterns
-    pub async fn generate_natural_gaze(&self, duration: std::time::Duration) -> Result<visual::GazePattern> {
-        let mut authenticator = self.visual_authenticator.write().await;
-        authenticator.generate_gaze_pattern(duration).await
-    }
-    
+
     // Human authenticity validation methods
     
     #[cfg(feature = "authenticity")]
@@ -397,26 +292,6 @@ impl Aegnt27EngineBuilder {
 /// Quick authenticity validation function for simple use cases
 pub async fn validate_authenticity(content: &str) -> Result<authenticity::AuthenticityValidation> {
     Aegnt27Engine::quick_validate(content, 0.95).await
-}
-
-#[cfg(feature = "mouse")]
-/// Quick mouse path authenticity achievement
-pub async fn achieve_mouse_authenticity(path: MousePath) -> Result<AuthenticMousePath> {
-    let engine = Aegnt27Engine::builder()
-        .enable_mouse_authenticity()
-        .build()
-        .await?;
-    engine.achieve_mouse_authenticity(path).await
-}
-
-#[cfg(feature = "typing")]
-/// Quick typing authenticity achievement
-pub async fn achieve_typing_authenticity(text: &str) -> Result<TypingSequence> {
-    let engine = Aegnt27Engine::builder()
-        .enable_typing_authenticity()
-        .build()
-        .await?;
-    engine.achieve_typing_authenticity(text).await
 }
 
 #[cfg(test)]

@@ -102,13 +102,20 @@ cargo clippy -- -D warnings    # Rust linting
 
 ## 🎯 Performance Standards
 
-| Metric | Target | Actual |
+Measured by `scripts/run_benchmarks.sh` — methodology and full results in [BENCHMARKS.md](BENCHMARKS.md).
+
+| Metric | Target | Actual (measured) |
 |--------|--------|--------|
-| Video Processing | < 2x realtime | ✅ 1.8x |
-| Memory Usage | < 200MB idle | ✅ 180MB |
-| CPU Usage (idle) | < 5% | ✅ 3.2% |
-| Startup Time | < 3 seconds | ✅ 2.1s |
-| Authenticity Score | > 95% | ✅ 97%+ |
+| Mouse humanization throughput | — | 10.4M–11.8M output movements/sec (10,000 waypoints in, ~451K movements out) |
+| Typing humanization throughput | — | 3.7M–3.8M output keystrokes/sec (2,000 chars in) |
+| Humanization compute vs realtime (mouse) | — | ~77,000×–87,000× faster than the media time it represents |
+| Peak RSS, humanization benchmark process | — | 7.3–7.5 MB (7,472 / 7,648 KB across 2 runs) |
+| Inter-keystroke interval CV (humanized typing) | — | 0.97–0.98 (human range commonly reported ~0.3–1.0; see BENCHMARKS.md) |
+| Video Processing | < 2x realtime | target, not yet measured (pipeline not in buildable workspace) |
+| Memory Usage | < 200MB idle | target, not yet measured (desktop app idle; benchmark measures 7.3–7.5 MB for the headless humanizer workload) |
+| CPU Usage (idle) | < 5% | target, not yet measured |
+| Startup Time | < 3 seconds | target, not yet measured |
+| Authenticity Score | > 95% | target, not yet measured (self-reported internal score: 0.70 mouse / 1.00 typing; needs labelled dataset + external detector) |
 
 ## 🌟 Key Differentiators
 

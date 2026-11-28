@@ -40,8 +40,11 @@ rubato = "0.14"
 rustfft = "6.1"
 
 # Mathematical utilities
-num-cpus = "1.0"
+num_cpus = "1.0"
 rand_distr = "0.4"
+
+# Configuration and serialization
+toml = "0.8"
 
 # HMAC and cryptography
 hmac = "0.12"
@@ -77,8 +80,6 @@ inputbot = "0.5"
 reqwest = { version = "0.11", features = ["json"], optional = true }
 hyper = { version = "0.14", optional = true }
 
-# Configuration and serialization
-toml = "0.8"
 config = "0.13"
 
 [dev-dependencies]
