@@ -50,6 +50,55 @@ DAILYDOCO/
 - **AI Models**: DeepSeek R1.1, Gemma 3, Flux.1
 - **Infrastructure**: Docker Compose, PostgreSQL, Redis, Neo4j
 
+## 🏗 Architecture
+
+Desktop app, web dashboard and browser extension share two Rust crates and a TypeScript type library:
+
+| Component | Stack | Entry point / notes |
+| --- | --- | --- |
+| [`apps/desktop`](apps/desktop/) | Tauri + Rust | [`src/main.rs`](apps/desktop/src/main.rs) — capture ([`capture.rs`](apps/desktop/src/capture.rs)), clip selection, GPU processing, dynamic pacing |
+| [`apps/web-dashboard`](apps/web-dashboard/) | React + Vite | [`src/App.tsx`](apps/web-dashboard/src/App.tsx) |
+| [`apps/browser-ext`](apps/browser-ext/) | WebExtension | [`chrome/`](apps/browser-ext/chrome/) and [`firefox/`](apps/browser-ext/firefox/) builds |
+| [`apps/api-server`](apps/api-server/) | Express.js | [`src/index.ts`](apps/api-server/src/index.ts), routes in [`src/routes/`](apps/api-server/src/routes/) |
+| [`apps/mcp-server`](apps/mcp-server/) | MCP server (TypeScript) | [`src/index.ts`](apps/mcp-server/src/index.ts), ten tools in [`src/tools/`](apps/mcp-server/src/tools/) |
+| [`libs/aegnt-27`](libs/aegnt-27/) | Rust crate | [`src/lib.rs`](libs/aegnt-27/src/lib.rs) — the human-authenticity engine |
+| [`libs/ai-models`](libs/ai-models/) | Rust modules | [`src/mod.rs`](libs/ai-models/src/mod.rs) — 19 prediction/optimisation modules |
+| [`libs/shared-types`](libs/shared-types/) | TypeScript | [`src/index.ts`](libs/shared-types/src/index.ts) |
+| [`libs/video-proc`](libs/video-proc/) · [`libs/test-audience`](libs/test-audience/) | Rust modules | [`video_analyzer.rs`](libs/video-proc/src/video_analyzer.rs) · [`engagement_engine.rs`](libs/test-audience/src/engagement_engine.rs) |
+| [`services/viral-engine`](services/viral-engine/) | TypeScript service | [`src/index.ts`](services/viral-engine/src/index.ts) |
+
+The Cargo workspace root [`Cargo.toml`](Cargo.toml) builds `apps/desktop`, `libs/aegnt-27` and `libs/shared-types`; `libs/ai-models`, `libs/video-proc` and `libs/test-audience` are Rust modules not yet wired into the workspace build.
+
+## 🔬 What is custom here
+
+- **Audio humanisation (Rust)**: [`libs/aegnt-27/src/audio.rs`](libs/aegnt-27/src/audio.rs) injects breathing patterns, vocal pitch/formant variation and background noise into PCM streams; [`libs/ai-models/src/audio_spectral_humanizer.rs`](libs/ai-models/src/audio_spectral_humanizer.rs) adds spectral-domain processing.
+- **Mouse, typing and gaze humanisation (Rust)**: [`mouse.rs`](libs/aegnt-27/src/mouse.rs), [`typing.rs`](libs/aegnt-27/src/typing.rs) and [`visual.rs`](libs/aegnt-27/src/visual.rs) implement the 27 behavioural patterns; detection scoring lives in [`detection.rs`](libs/aegnt-27/src/detection.rs) and [`authenticity.rs`](libs/aegnt-27/src/authenticity.rs).
+- **Model performance monitoring (Rust)**: [`libs/ai-models/src/model_performance_monitor.rs`](libs/ai-models/src/model_performance_monitor.rs) tracks per-model metrics, cost and latency, and routes between models (`PerformanceTracker`, `CostAnalyzer`, `LatencyMonitor`).
+- **Prediction & optimisation models (Rust)**: engagement/retention/CTR predictors, thumbnail & title optimisers, an A/B-testing engine and personal-brand learning under [`libs/ai-models/src/`](libs/ai-models/src/).
+- **Capture intelligence (Rust)**: [`intelligent_clip_selector.rs`](apps/desktop/src/intelligent_clip_selector.rs), [`dynamic_pacing_engine.rs`](apps/desktop/src/dynamic_pacing_engine.rs) and [`gpu_processor.rs`](apps/desktop/src/gpu_processor.rs).
+- **MCP tool surface (TypeScript)**: ten tools in [`apps/mcp-server/src/tools/`](apps/mcp-server/src/tools/) — capture control, authenticity engine, project fingerprinting, AI test audience, video compiler, and more.
+- **Tests**: Rust unit tests are inline `#[cfg(test)]` modules at the bottom of each file above; TypeScript tests run through the Nx targets below.
+
+## 🧪 Testing & CI
+
+CI is defined in [`.github/workflows/ci.yml`](.github/workflows/ci.yml): path-filtered Nx jobs on Node 20, plus a Rust job on stable with clippy and rustfmt.
+
+```bash
+# TypeScript quality + tests (CI matrix: api-server, mcp-server, shared-types)
+npx nx run api-server:type-check   # repeated per target in the CI matrix
+npx nx run api-server:lint
+npx nx run api-server:test         # coverage uploaded to Codecov
+npx prettier --check "apps/web-dashboard/src/**/*.{ts,tsx}"
+
+# Rust (working directory: apps/desktop)
+cargo fmt --all --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test --all-features
+
+# aegnt-27 crate's own inline unit tests
+cargo test -p aegnt-27             # also covered by `cargo test` at the repo root
+```
+
 ## 🚦 Quick Start
 
 ### Prerequisites
