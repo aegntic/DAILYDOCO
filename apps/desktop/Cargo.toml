@@ -58,7 +58,7 @@ rustfft = "6.1"
 # Mathematical utilities
 rand = "0.8"
 rand_distr = "0.4"
-num-cpus.workspace = true
+num_cpus.workspace = true
 
 # Cryptography and security
 sha2 = "0.10"

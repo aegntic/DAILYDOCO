@@ -53,6 +53,7 @@ impl Default for AuthenticityConfig {
 }
 
 /// Core authenticity enhancement engine
+#[derive(Debug)]
 pub struct AuthenticityEngine {
     config: AuthenticityConfig,
     pattern_library: HashMap<String, Vec<f64>>,
